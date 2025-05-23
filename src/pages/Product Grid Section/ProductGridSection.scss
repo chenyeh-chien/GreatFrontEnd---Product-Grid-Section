@@ -1,0 +1,23 @@
+.product-grid-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 96px;
+    box-sizing: border-box;
+
+    .product-grid-section__content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: stretch;
+        gap: 32px;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .product-grid-section {
+        width: 1408px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+}

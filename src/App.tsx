@@ -1,11 +1,11 @@
 import ProductGridSection from './pages/Product Grid Section/ProductGridSection'
-import './App.css'
+import './App.scss'
 
 function App() {
   return (
-    <>
+    <div className='app'>
       <ProductGridSection />
-    </>
+    </div>
   )
 }
 

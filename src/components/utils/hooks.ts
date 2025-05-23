@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
-import type { EcommerceProductList } from "./types";
-import { fetchEcommerceProductList } from "./utilFunctions";
+import type { EcommerceProductInfo } from "./types";
+import { fetchEcommerceProductInfo } from "./utilFunctions";
 
-export function usePoductList() {
-    const [ productList, setProductList ] = 
-        useState<EcommerceProductList | null>(null);
+export function usePoductInfo() {
+    const [productInfo, setProductInfo] = 
+        useState<EcommerceProductInfo | null>(null);
 
     useEffect(() => {
-        const fetchProductList = async () => {
-            setProductList(await fetchEcommerceProductList());
+        let isCanceled = false;
+
+        try {
+            const fetchProductInfo = async () => {
+                setProductInfo(await fetchEcommerceProductInfo());
+            }
+
+            fetchProductInfo();
+        } catch(error) {
+            if (!isCanceled) {
+                throw error;
+            } 
         }
 
-        fetchProductList();
-
         return () => {
-            
+            isCanceled = true;
         }
     }, [])
 
-    return [ productList ]
+    return [productInfo];
 }
