@@ -1,25 +1,14 @@
-import { useEffect } from "react";
-import ProductCard from "../../components/utils/Card/Product Card/ProductCard"
+import { usePoductList } from "../../components/utils/hooks";
+import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
 
 export default function ProductGridSection() {
-    useEffect(() => {
-        fetchEcommerceProductList().then(data => console.log(data));
-    }, [])
+    const [ productList ] = usePoductList();
 
-    function fetchEcommerceProductList() {
-        return new Promise((resolve, reject) => {
-            const url =
-                "https://www.greatfrontend.com/api/projects/challenges/e-commerce/products";
-            fetch(url)
-                .then(response => response.json())
-                .then(data => resolve(data))
-                .catch(error => reject(error));
-        })
-    }
+    console.log(productList);
 
     return (
         <div>
-
+            <ProductCard />
         </div>
     )
 }
