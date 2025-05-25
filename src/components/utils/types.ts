@@ -16,6 +16,7 @@ type EcommerceProductInventory = {
 export type EcommerceProductItem = {
     product_id: string;
     name: string;
+    description: string;
     collection: EcommerceProductCollection;
     colors: string[];
     images: EcommerceProductImage[];

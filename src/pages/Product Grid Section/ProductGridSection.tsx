@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactElement } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { usePoductInfo } from "../../components/utils/hooks";
 import type { EcommerceProductImage } from "../../components/utils/types";
@@ -30,19 +30,26 @@ export default function ProductGridSection() {
 
   return (
     <div className="product-grid-section">
-      <div className="product-grid-section__content">
+      <header className="product-grid-section__header">
+        <h1>Latest Arrivals</h1>
+        <div>
+          <button>View all</button>
+        </div>
+      </header>
+      <main className="product-grid-section__content">
         {productImages.map((item, index) => {
           return (
           <ProductCard 
             key={item.id}
             productName={productInfo!.data[index].name}
+            description={productInfo!.data[index].description}
             productImages={item.images}
             colors={productInfo!.data[index].colors}
             listPrice={productInfo!.data[index].inventory[0].list_price}
             salePrice={productInfo!.data[index].inventory[0].sale_price}/>
           )
         })}
-      </div>
+      </main>
     </div>
   )
 }

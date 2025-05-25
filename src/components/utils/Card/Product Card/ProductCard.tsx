@@ -6,6 +6,7 @@ import './ProductCard.scss';
 
 interface Props {
   productName: string;
+  description: string;
   colors: string[];
   productImages: EcommerceProductImage[];
   listPrice: number;
@@ -19,6 +20,7 @@ type colorInfo = {
 
 export default React.memo(function ProductCard({
   productName, 
+  description,
   colors,
   productImages, 
   listPrice,
@@ -46,34 +48,35 @@ export default React.memo(function ProductCard({
   }
 
   return (
-    <article className='product-card'>
-      {/* card main */}
-      <figure>
-        <img src={productImages[itemIndex].image_url}/>
-        <div className='product-card__info'>
-          <div>
-            <h4 className='product_card__info--color'>{productImages[itemIndex].color}</h4>
-            <figcaption>{productName}</figcaption>
-          </div>
-          <div className='product_card__info--price'>
-            <span>${salePrice}</span>
-            {salePrice !== listPrice && 
-             <span>${listPrice}</span>
-            }
-          </div>
-          <div className='product_card__info__color-list'>
-            {colorList.map(item => {
-              return (
-                <ColorButton 
-                  key={item.id}
-                  color={item.color}
-                  isSelected={productImages[itemIndex].color === item.color}
-                  onChangeColorIndex={(color) => handleChangeColorIndex(color)}/>
-              )
-            })}
-          </div>
+    <figure className='product-card'>
+      <img 
+        src={productImages[itemIndex].image_url}
+        alt={description}
+        loading="lazy"
+        title={productName}/>
+      <div className='product-card__info'>
+        <div>
+          <h4 className='product_card__info--color'>{productImages[itemIndex].color}</h4>
+          <figcaption>{productName}</figcaption>
         </div>
-      </figure>
-    </article>
+        <div className='product_card__info--price'>
+          <span>${salePrice}</span>
+          {salePrice !== listPrice && 
+            <span>${listPrice}</span>
+          }
+        </div>
+        <div className='product_card__info__color-list'>
+          {colorList.map(item => {
+            return (
+              <ColorButton 
+                key={item.id}
+                color={item.color}
+                isSelected={productImages[itemIndex].color === item.color}
+                onChangeColorIndex={(color) => handleChangeColorIndex(color)}/>
+            )
+          })}
+        </div>
+      </div>
+    </figure>
   )
 })
