@@ -48,16 +48,17 @@ export default React.memo(function ProductCard({
   }
 
   return (
-    <figure className='product-card'>
+    <figure className='flex flex-col grow'>
       <img 
+        className='self-stretch h-[300px] rounded-lg object-cover'
         src={productImages[itemIndex].image_url}
         alt={description}
         loading="lazy"
         title={productName}/>
-      <div className='product-card__info'>
+      <div className='flex flex-col gap-3 self-stretch h-[168px] py-4'>
         <div>
           <h4 className='product_card__info--color'>{productImages[itemIndex].color}</h4>
-          <figcaption>{productName}</figcaption>
+          <figcaption className='font-medium text-lg text-neutral-900'>{productName}</figcaption>
         </div>
         <div className='product_card__info--price'>
           <span>${salePrice}</span>
