@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { EcommerceProductImage } from '../../types';
 import ColorButton from '../../Button/Color Button/ColorButton';
-import './ProductCard.scss';
 
 interface Props {
   productName: string;
@@ -48,7 +47,7 @@ export default React.memo(function ProductCard({
   }
 
   return (
-    <figure className='flex flex-col grow'>
+    <figure className='flex flex-col xs:flex-grow md:w-[336px] xl:w-[280px]'>
       <img 
         className='self-stretch h-[300px] rounded-lg object-cover'
         src={productImages[itemIndex].image_url}
@@ -57,16 +56,22 @@ export default React.memo(function ProductCard({
         title={productName}/>
       <div className='flex flex-col gap-3 self-stretch h-[168px] py-4'>
         <div>
-          <h4 className='product_card__info--color'>{productImages[itemIndex].color}</h4>
-          <figcaption className='font-medium text-lg text-neutral-900'>{productName}</figcaption>
+          <h4 className='font-normal text-xs text-neutral-600'>
+            {productImages[itemIndex].color}
+          </h4>
+          <figcaption className='font-medium text-lg text-neutral-900'>
+            {productName}
+          </figcaption>
         </div>
-        <div className='product_card__info--price'>
-          <span>${salePrice}</span>
+        <div className='flex items-center gap-2 self-stretch'>
+          <span className='font-normal text-lg text-neutral-500'>
+            ${salePrice}
+          </span>
           {salePrice !== listPrice && 
-            <span>${listPrice}</span>
+            <span className='font-normal text-xs line-through text-neutral-600'>${listPrice}</span>
           }
         </div>
-        <div className='product_card__info__color-list'>
+        <div className='flex gap-1'>
           {colorList.map(item => {
             return (
               <ColorButton 

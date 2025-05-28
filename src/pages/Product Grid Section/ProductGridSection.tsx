@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { usePoductInfo } from "../../components/utils/hooks";
 import type { EcommerceProductImage } from "../../components/utils/types";
 import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
-import './ProductGridSection.scss';
 
 type ProductImages = {
   images: EcommerceProductImage[];
@@ -29,14 +28,16 @@ export default function ProductGridSection() {
   }, [productInfo]); 
 
   return (
-    <div className="product-grid-section">
-      <header className="product-grid-section__header">
-        <h1>Latest Arrivals</h1>
+    <div className="flex flex-col gap-12 self-stretch px-3 py-12 md:gap-16 md:px-4 md:py-16 xl:p-24">
+      <header className="flex items-center gap-4 self-stretch justify-between">
+        <h1 className="font-semibold text-2xl text-neutral-900">Latest Arrivals</h1>
         <div>
-          <button>View all</button>
+          <button className="font-medium bg-white border-[0.5px] border-solid border-neutral-200 rounded px-4 py-2.5">
+            View all
+          </button>
         </div>
       </header>
-      <main className="product-grid-section__content">
+      <main className="flex flex-wrap gap-8 justify-center self-stretch">
         {productImages.map((item, index) => {
           return (
           <ProductCard 
