@@ -1,4 +1,4 @@
-import './ColorButton.scss';
+import { clsx } from 'clsx';
 
 interface Props {
     color: string;
@@ -23,10 +23,14 @@ export default function ColorButton({
   }
 
   return (
-    <span 
-      className={isSelected ? 'color-button color-button__selected' : 'color-button'}
+    <button 
+      className={clsx(
+        'inline-block w-4 h-4',
+        'rounded-full border-[0.5px] border-solid border-gray-200',
+        'hover:cursor-pointer', isSelected && 'border-gray-400'
+      )}
       style={{backgroundColor: color}}
       onClick={(e) => handleSelectColor(e, color)}>
-    </span>
+    </button>
   )
 }

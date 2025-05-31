@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { clsx } from 'clsx';
 import { v4 as uuidv4 } from 'uuid';
 import { usePoductInfo } from "../../components/utils/hooks";
 import type { EcommerceProductImage } from "../../components/utils/types";
@@ -28,16 +29,30 @@ export default function ProductGridSection() {
   }, [productInfo]); 
 
   return (
-    <div className="flex flex-col gap-12 self-stretch px-3 py-12 md:gap-16 md:px-4 md:py-16 xl:p-24">
+    <div className={clsx(
+      'flex flex-col gap-12 self-stretch',
+      'px-3 py-12',
+      'md:gap-16 md:px-4 md:py-16 xl:p-24'
+    )}>
       <header className="flex items-center gap-4 self-stretch justify-between">
-        <h1 className="font-semibold text-2xl text-neutral-900">Latest Arrivals</h1>
+        <h1 className="font-semibold text-2xl text-neutral-900">
+          Latest Arrivals
+        </h1>
         <div>
-          <button className="font-medium bg-white border-[0.5px] border-solid border-neutral-200 rounded px-4 py-2.5">
+          <button className={clsx(
+            'font-medium bg-white border-[0.5px]',
+            'border-solid border-neutral-200 rounded',
+            'rounded px-4 py-2.5 hover:cursor-pointer'
+          )}>
             View all
           </button>
         </div>
       </header>
-      <main className="flex flex-wrap gap-8 justify-center self-stretch">
+      <main className={clsx(
+        'md:grid md:grid-cols-[repeat(auto-fit,336px)]',
+        'xl:grid-cols-[repeat(auto-fit,280px)]',
+        'gap-8 justify-between self-stretch'
+      )}>
         {productImages.map((item, index) => {
           return (
           <ProductCard 

@@ -47,7 +47,7 @@ export default React.memo(function ProductCard({
   }
 
   return (
-    <figure className='flex flex-col xs:flex-grow md:w-[336px] xl:w-[280px]'>
+    <figure className='flex flex-col flex-grow md:w-[336px] md:flex-grow-0 xl:w-[280px]'>
       <img 
         className='self-stretch h-[300px] rounded-lg object-cover'
         src={productImages[itemIndex].image_url}
@@ -68,7 +68,9 @@ export default React.memo(function ProductCard({
             ${salePrice}
           </span>
           {salePrice !== listPrice && 
-            <span className='font-normal text-xs line-through text-neutral-600'>${listPrice}</span>
+            <span className='font-normal text-xs line-through text-neutral-600'>
+              ${listPrice}
+            </span>
           }
         </div>
         <div className='flex gap-1'>
