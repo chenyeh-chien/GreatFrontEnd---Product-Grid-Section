@@ -15,6 +15,7 @@ export default function ColorButton({
     event: React.MouseEvent, 
     color: string
   ) {
+    event.preventDefault();
     if (isSelected) {
         return;
     }
