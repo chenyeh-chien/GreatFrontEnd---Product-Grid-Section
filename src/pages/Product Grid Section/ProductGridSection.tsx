@@ -13,7 +13,7 @@ type ProductImages = {
 export default function ProductGridSection() {
   const [productInfo] = usePoductInfo();
   const [productImages, setProductImages] = useState<ProductImages[]>([]);
-  const [pageIndex, setPageIndex] = useState(0);
+  // const [pageIndex, setPageIndex] = useState(0);
 
   useEffect(() => {
     if (productInfo !== null && productInfo.data.length > 0) {
