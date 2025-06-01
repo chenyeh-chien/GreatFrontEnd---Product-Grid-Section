@@ -1,13 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { CSSTransition } from "react-transition-group";
 import { RiShoppingBag3Line } from "react-icons/ri";
 import { BsList } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 import { clsx } from "clsx";
 import type { NavbarLink } from "../types";
 import appIcon from '../../../assets/stylenest.svg';
-import './NavbarMain.css';
 
 const links: NavbarLink[] = [{
   id: 1,
@@ -22,13 +20,22 @@ const links: NavbarLink[] = [{
 
 export default function NavbarMain() {
   const [showLinks, setShowLinks] = useState(false);
-  const nodeRef = useRef(null);
+
+  useEffect(() => {
+    if (showLinks) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [showLinks]);
 
   return (
-    <nav className="flex flex-col ">
-      <div className={clsx(
+    <header className="flex flex-col px-4 w-full bg-white">
+      <nav className={clsx(
         'flex items-center self-stretch justify-between',
-        'px-4 h-[68px] xl:gap-[103px]'
+        'h-[68px] xl:gap-[103px] z-20'
       )}>
         <Link to="/">
           <img src={appIcon} />
@@ -60,21 +67,20 @@ export default function NavbarMain() {
             )
           }
         </div>
-      </div>
-      <CSSTransition
-        in={showLinks}
-        timeout={300}
-        classNames="dropdown"
-        nodeRef={nodeRef}
-        unmountOnExit>
-        <ul 
-          ref={nodeRef}
-          className="flex flex-col gap-2">
+      </nav>
+      <nav className={clsx(
+        'fixed left-0 h-full px-4 py-[68px]',
+        'opacity-0 duration-300 ease-in-out',
+        showLinks && 'opacity-100',
+        'bg-white w-full'
+      )}>
+        <ul className="flex flex-col gap-2 self-stretch">
           {links.map(info => {
             return (
               <li 
                 className="px-3 py-2"
-                key={info.id}>
+                key={info.id}
+                onClick={() => setShowLinks(false)}>
                 <Link to={info.path}>
                   {info.name}
                 </Link>
@@ -82,7 +88,7 @@ export default function NavbarMain() {
             )
           })}
         </ul>
-      </CSSTransition>
-    </nav>
+      </nav>
+    </header>
   )
 }
