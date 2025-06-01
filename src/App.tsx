@@ -1,12 +1,10 @@
-import ProductGridSection from './pages/Product Grid Section/ProductGridSection'
-import './App.scss'
+import LatestArrivals from './pages/Latest Arrivals/LatestArrivals';
+import { Routes, Route } from "react-router";
 
-function App() {
+export default function App() {
   return (
-    <div className='app'>
-      <ProductGridSection />
-    </div>
-  )
+    <Routes>
+      <Route path="/latest-arrivals" element={<LatestArrivals />} />
+    </Routes>
+  );
 }
-
-export default App

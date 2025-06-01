@@ -30,3 +30,9 @@ export type EcommerceProductInfo = {
         [key: string]: unknown;    
     }
 }
+
+export type NavbarLink = {
+    id: number;
+    name: string;
+    path: string;
+}
