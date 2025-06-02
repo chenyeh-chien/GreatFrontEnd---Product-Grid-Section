@@ -28,17 +28,35 @@ export default function NavbarMain() {
       document.body.classList.remove("overflow-hidden");
     }
 
-    return () => document.body.classList.remove("overflow-hidden");
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    }
   }, [showLinks]);
 
+  function handleWindowResize(event: UIEvent) {
+    event.preventDefault();
+
+    if (showLinks) {
+      setShowLinks(false);
+    }
+  }
+
   return (
-    <header className="flex flex-col px-4 w-full bg-white">
-      <nav className={clsx(
-        'flex items-center self-stretch justify-between',
-        'h-[68px] xl:gap-[103px] z-20'
-      )}>
-        <Link to="/">
-          <img src={appIcon} />
+    <header className="flex flex-col px-4 md:px-8 w-full bg-white">
+      <nav 
+        className={clsx(
+          'flex items-center self-stretch justify-between',
+          'h-[68px] xl:gap-[103px] xl:py-3 z-20'
+        )}
+        aria-label="Main navigation">
+        <Link 
+          to="/"
+          aria-label="Homepage">
+          <img 
+            src={appIcon}
+            alt="App logo" />
         </Link>
         <ul className="hidden xl:flex xl:gap-8 xl:flex-grow-1">
           {links.map(info => {
@@ -54,26 +72,38 @@ export default function NavbarMain() {
         <div className="flex gap-4">
           {
             showLinks
-            ? <RxCross2
-                className="w-6 h-6 hover:cursor-pointer"
-                onClick={() => setShowLinks(false)}/>
+            ? <button>
+                <RxCross2
+                  className="w-6 h-6 hover:cursor-pointer"
+                  aria-label="Close navigation menu"
+                  onClick={() => setShowLinks(false)}/>
+              </button>
             : (
               <>
-                <RiShoppingBag3Line className="w-6 h-6 hover:cursor-pointer"/>
-                <BsList 
-                  className="w-6 h-6 hover:cursor-pointer xl:hidden"
-                  onClick={() => setShowLinks(true)}/>
+                <button>
+                  <RiShoppingBag3Line 
+                    className="w-6 h-6 hover:cursor-pointer"
+                    aria-label="View shopping cart"/>
+                </button>
+                <button>
+                  <BsList 
+                    className="w-6 h-6 hover:cursor-pointer xl:hidden"
+                    aria-label="Open navigation menu"
+                    onClick={() => setShowLinks(true)}/>
+                </button>
               </>
             )
           }
         </div>
       </nav>
-      <nav className={clsx(
-        'fixed left-0 h-full px-4 py-[68px]',
-        'opacity-0 duration-300 ease-in-out',
-        showLinks && 'opacity-100',
-        'bg-white w-full'
-      )}>
+      <nav 
+        className={clsx(
+          'fixed left-0 h-full px-4 py-[68px]',
+          'opacity-0 duration-300 ease-in-out',
+          showLinks && 'opacity-100',
+          'bg-white w-full'
+        )}
+        aria-label="Mobile navigation menu">
         <ul className="flex flex-col gap-2 self-stretch">
           {links.map(info => {
             return (
