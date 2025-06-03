@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { EcommerceProductImage } from '../../types';
+import { capitalize } from '../../utilFunctions';
 import ColorButton from '../../Button/Color Button/ColorButton';
 
 interface Props {
@@ -57,7 +58,7 @@ export default React.memo(function ProductCard({
       <div className='flex flex-col gap-3 self-stretch h-[168px] py-4'>
         <div>
           <h4 className='font-normal text-xs text-neutral-600'>
-            {productImages[itemIndex].color}
+            {capitalize(productImages[itemIndex].color)}
           </h4>
           <figcaption className='font-medium text-lg text-neutral-900'>
             {productName}

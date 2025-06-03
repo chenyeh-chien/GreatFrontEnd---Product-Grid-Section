@@ -99,8 +99,8 @@ export default function NavbarMain() {
       <nav 
         className={clsx(
           'fixed left-0 h-full px-4 py-[68px]',
-          'opacity-0 duration-300 ease-in-out',
-          showLinks && 'opacity-100',
+          'opacity-0 duration-300 ease-in-out -translate-x-full',
+          showLinks && 'opacity-100 translate-x-0',
           'bg-white w-full'
         )}
         aria-label="Mobile navigation menu">

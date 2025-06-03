@@ -11,6 +11,7 @@ export type EcommerceProductImage = {
 type EcommerceProductInventory = {
     list_price: number;
     sale_price: number;
+    stock: number;
 }
 
 export type EcommerceProductItem = {
