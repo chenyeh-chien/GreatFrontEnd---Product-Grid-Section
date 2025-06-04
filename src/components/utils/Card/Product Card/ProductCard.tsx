@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { EcommerceProductImage } from '../../types';
 import { capitalize } from '../../utilFunctions';
 import ColorButton from '../../Button/Color Button/ColorButton';
+import RatingButton from '../../Button/Rating/RatingButton';
 
 interface Props {
   productName: string;
@@ -63,6 +64,26 @@ export default React.memo(function ProductCard({
           <figcaption className='font-medium text-lg text-neutral-900'>
             {productName}
           </figcaption>
+          <RatingButton 
+            totalStar={5}
+            currStar={5}
+            selected={false}/>
+          <RatingButton 
+            totalStar={5}
+            currStar={4}
+            selected={false}/>
+          <RatingButton 
+            totalStar={5}
+            currStar={3}
+            selected={false}/>
+          <RatingButton 
+            totalStar={5}
+            currStar={2}
+            selected={false}/>
+          <RatingButton 
+            totalStar={5}
+            currStar={1}
+            selected={false}/>
         </div>
         <div className='flex items-center gap-2 self-stretch'>
           <span className='font-normal text-lg text-neutral-500'>

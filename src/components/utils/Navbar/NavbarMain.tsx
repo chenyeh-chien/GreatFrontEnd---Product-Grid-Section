@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import { RiShoppingBag3Line } from "react-icons/ri";
 import { BsList } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
@@ -51,20 +51,20 @@ export default function NavbarMain() {
           'h-[68px] xl:gap-[103px] xl:py-3 z-20'
         )}
         aria-label="Main navigation">
-        <Link 
+        <NavLink 
           to="/"
           aria-label="Homepage">
           <img 
             src={appIcon}
             alt="App logo" />
-        </Link>
+        </NavLink>
         <ul className="hidden xl:flex xl:gap-8 xl:flex-grow-1">
           {links.map(info => {
             return (
               <li key={info.id}>
-                <Link to={info.path}>
+                <NavLink to={info.path}>
                   {info.name}
-                </Link>
+                </NavLink>
               </li>
             )
           })}
@@ -111,9 +111,9 @@ export default function NavbarMain() {
                 className="px-3 py-2"
                 key={info.id}
                 onClick={() => setShowLinks(false)}>
-                <Link to={info.path}>
+                <NavLink to={info.path}>
                   {info.name}
-                </Link>
+                </NavLink>
               </li>
             )
           })}
