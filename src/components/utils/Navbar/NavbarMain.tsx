@@ -10,7 +10,7 @@ import appIcon from '../../../assets/stylenest.svg';
 const links: NavbarLink[] = [{
   id: 1,
   name: "Shop all",
-  path: "/"
+  path: "/shop-all"
 },
 {
   id: 2,
