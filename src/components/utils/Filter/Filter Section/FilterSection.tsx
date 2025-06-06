@@ -13,8 +13,8 @@ export default function FilterSection({
   children 
 }: Props) {
   return (
-    <section>
-      <div className="flex gap-2 items-center self-stretch">
+    <section className="flex flex-col gap-6 self-stretch">
+      <div className="flex gap-2 items-center self-stretch justify-between">
         <h1>{name}</h1>
         <button>
         {

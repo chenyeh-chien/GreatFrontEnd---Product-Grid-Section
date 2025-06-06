@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
-import type { EcommerceProductInfo } from "./types";
-import { fetchEcommerceProductInfo } from "./utilFunctions";
+import type { 
+    QueryObject,
+    EcommerceProductInfo
+} from "./types";
+import { 
+    toQueryParams, 
+    toQueryString, 
+    fetchEcommerceProductInfo 
+} from "./utilFunctions";
 
-export function usePoductInfo() {
+// TODO: take optional query parameters
+export function usePoductInfo(queryObj?: QueryObject) {
     const [productInfo, setProductInfo] = 
         useState<EcommerceProductInfo | null>(null);
 
@@ -11,7 +19,12 @@ export function usePoductInfo() {
 
         try {
             const fetchProductInfo = async () => {
-                setProductInfo(await fetchEcommerceProductInfo());
+                let queryStr: string | undefined;
+                if (queryObj) {
+                    queryStr = toQueryString(toQueryParams(queryObj));
+                }
+
+                setProductInfo(await fetchEcommerceProductInfo(queryStr));
             }
 
             fetchProductInfo();

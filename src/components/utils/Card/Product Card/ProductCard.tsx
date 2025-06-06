@@ -80,7 +80,7 @@ export default React.memo(function ProductCard({
               <ColorButton 
                 key={item.id}
                 color={item.color}
-                isSelected={productImages[itemIndex].color === item.color}
+                selected={productImages[itemIndex].color === item.color}
                 onChangeColorIndex={(color) => handleChangeColorIndex(color)}/>
             )
           })}

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { IoIosStar } from "react-icons/io";
-import { IoIosStarOutline } from "react-icons/io";
 import { clsx } from "clsx";
 
 interface Props {
@@ -24,7 +23,9 @@ export default function RatingButton({ totalStar, currStar, selected }: Props) {
       onMouseLeave={() => setIsHover(false)}>
       {Array.from({ length: totalStar }).map((_, index) => {
         return (
-          <IoIosStar className={clsx(
+          <IoIosStar 
+            key={index}
+            className={clsx(
             "text-xl text-neutral-200",
             index + 1 <= currStar && "text-yellow-400"
           )}/> // selected: text-yellow-600

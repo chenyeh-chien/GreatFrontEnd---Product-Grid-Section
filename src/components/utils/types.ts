@@ -1,3 +1,10 @@
+export type Primitive = string | number | boolean;
+export type QueryValue = Primitive | Primitive[] | QueryObject;
+export type QueryObject = {
+    [key: string]: QueryValue;
+}
+export type QueryParam = [string, Primitive];
+
 type EcommerceProductCollection = {
     image_url: string;
 }
@@ -36,4 +43,11 @@ export type NavbarLink = {
     id: number;
     name: string;
     path: string;
+}
+
+export type EcommerceProductQueryParameters = {
+    collections: string[];
+    category: string[];
+    colors: string[];
+    rating: number[];
 }
