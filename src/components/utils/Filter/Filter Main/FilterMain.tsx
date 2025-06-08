@@ -6,21 +6,37 @@ import RatingButton from "../../Button/Rating/RatingButton";
 
 interface Props {
   options: FilterOptions
+  onChange: (options: FilterOptions) => void;
 }
 
-export default function FilterMain({ options }: Props) {
-  // TODO: data structure
+export default function FilterMain({ options, onChange }: Props) {
 
-  function handleChangeColorIndex(color: string) {
-    // change colors
+  // TODO: handle data change
+  function handleChangeCollections(color: string) {
+    
+  }
+
+  function handleChangeCategories(color: string) {
+
+  }
+
+  function handleChangeColors(color: string) {
+    console.log(color)
+
+    onChange({
+      ...options,
+      
+    })
+  }
+
+  function handleChangeRating(color: string) {
 
   }
 
   return (
     <aside className="w-[248px] flex flex-col gap-6">
       <FilterSection
-        name="Collections"
-        isExtending={false}>
+        name="Collections">
         {options.collections.map(info => {
           return (
             <Checkbox
@@ -30,10 +46,9 @@ export default function FilterMain({ options }: Props) {
           )
         })}
       </FilterSection>
-      <hr />
+      <hr className="text-neutral-300"/>
       <FilterSection
-        name="Category"
-        isExtending={false}>
+        name="Category">
         {options.category.map(info => {
           return (
             <Checkbox
@@ -43,10 +58,9 @@ export default function FilterMain({ options }: Props) {
           )
         })}
       </FilterSection>
-      <hr />
+      <hr className="text-neutral-300"/>
       <FilterSection
-        name="Colors"
-        isExtending={false}>
+        name="Colors">
         <div className="flex flex-wrap gap-2">
           {options.colors.map(info => {
             return (
@@ -54,15 +68,14 @@ export default function FilterMain({ options }: Props) {
                 key={info.id}
                 color={info.color}
                 selected={info.selected}
-                onChangeColorIndex={(color) => handleChangeColorIndex(color)}/>
+                onChangeColorIndex={(color) => handleChangeColors(color)}/>
             )
           })}
         </div>
       </FilterSection>
-      <hr />
+      <hr className="text-neutral-300"/>
       <FilterSection
-        name="Rating"
-        isExtending={false}>
+        name="Rating">
         {options.rating.map(info => {
           return (
             <RatingButton 

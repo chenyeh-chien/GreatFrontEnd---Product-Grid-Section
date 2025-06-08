@@ -14,7 +14,7 @@ export default function RatingButton({ totalStar, currStar, selected }: Props) {
   return (
     <button 
       className={clsx(
-        "flex items-center gap-1 p-0.5",
+        "flex items-center gap-1 p-0.5 w-max",
         "focus:rounded-sm focus:border-2 focus:border-solid",
         "focus:border-indigo-200 focus:outline-none",
         "hover:cursor-pointer"

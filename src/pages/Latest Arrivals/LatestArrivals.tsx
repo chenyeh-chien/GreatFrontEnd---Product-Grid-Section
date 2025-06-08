@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { clsx } from 'clsx';
 import { v4 as uuidv4 } from 'uuid';
-import { usePoductInfo } from "../../components/utils/hooks";
+import { useProductInfo } from "../../components/utils/hooks";
 import type { EcommerceProductImage } from "../../components/utils/types";
 import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
 
@@ -11,7 +11,7 @@ type ProductImages = {
 }
 
 export default function ProductGridSection() {
-  const [productInfo] = usePoductInfo();
+  const [productInfo] = useProductInfo();
   const [productImages, setProductImages] = useState<ProductImages[]>([]);
   // const [pageIndex, setPageIndex] = useState(0);
 

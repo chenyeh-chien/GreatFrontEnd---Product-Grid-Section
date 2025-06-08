@@ -1,30 +1,40 @@
+import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";
+import { clsx } from "clsx";
 
 interface Props {
   name: string;
-  isExtending: boolean;
   children: React.ReactNode
 }
 
 export default function FilterSection({ 
-  name, 
-  isExtending, 
+  name,
   children 
 }: Props) {
+  const [isExtending, setIsExtending] = useState(true);
+
   return (
     <section className="flex flex-col gap-6 self-stretch">
       <div className="flex gap-2 items-center self-stretch justify-between">
-        <h1>{name}</h1>
-        <button>
+        <h1 className="font-medium text-base text-neutral-900">{name}</h1>
+        <button 
+          className="flex justify-center items-center w-6 h-6 hover:cursor-pointer"
+          onClick={() => setIsExtending(!isExtending)}>
         {
           isExtending 
-          ? <FaPlus />
-          : <FaMinus />
+          ? <FaMinus className="w-5 h-5"/>
+          : <FaPlus className="w-5 h-5"/>
         }
         </button>
       </div>
-      {children}
+      <div 
+        className={clsx(
+          "flex flex-col gap-6 self-stretch",
+          !isExtending && "hidden"
+        )}>
+        {children}
+      </div>
     </section>
   )
 }

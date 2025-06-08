@@ -1,16 +1,21 @@
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid';
+import type { FilterOptions } from "./Filter/Filter Main/filterMain.ts";
 import type { 
     QueryObject,
-    EcommerceProductInfo
+    EcommerceProductInfo,
+    EcommerceFilterData
 } from "./types";
 import { 
     toQueryParams, 
     toQueryString, 
-    fetchEcommerceProductInfo 
+    fetchEcommerceProductInfo,
+    fetchEcommerceCategories,
+    fetchEcommerceCollections,
+    fetchEcommerceInventory
 } from "./utilFunctions";
 
-// TODO: take optional query parameters
-export function usePoductInfo(queryObj?: QueryObject) {
+export function useProductInfo(queryObj?: QueryObject) {
     const [productInfo, setProductInfo] = 
         useState<EcommerceProductInfo | null>(null);
 
@@ -40,4 +45,98 @@ export function usePoductInfo(queryObj?: QueryObject) {
     }, [])
 
     return [productInfo];
+}
+
+export function useFilterData() {
+    const [filterData, setFilterData] = useState<EcommerceFilterData | null>(null);
+
+    useEffect(() => {
+        let isCanceled = false;
+
+        try {
+            const fetchFilterData = async () => {
+                const [collections, categories, inventory] = await Promise.all([
+                    fetchEcommerceCollections(),
+                    fetchEcommerceCategories(),                    
+                    fetchEcommerceInventory(),
+                ])
+
+                setFilterData({ collections, categories, inventory })
+            }
+            
+            fetchFilterData();
+        } catch (error) {
+            if (!isCanceled) {
+                throw error;
+            } 
+        }
+        
+        return () => {
+            isCanceled = true;
+        }
+    }, []);
+
+    return [filterData]
+}
+
+export function useFilterOptions() {
+    const [filterData] = useFilterData();
+    const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
+
+    useEffect(() => {
+        let isCanceled = false;
+
+        try {
+            if (filterData !== null) {
+                const collections = filterData.collections.data.map(item => {
+                    return {
+                        id: item.collection_id,
+                        name: item.name,
+                        selected: false,
+                    }
+                });
+                const category = filterData.categories.data.map(item => {
+                    return {
+                        id: item.category_id,
+                        name: item.name,
+                        selected: false, 
+                    }
+                });
+                const colors = 
+                    Array.from(new Set(filterData.inventory.map(item => item.color)))
+                        .map(color => {
+                            return {
+                                id: uuidv4(),
+                                color: color,
+                                selected: false,
+                            }
+                        })
+                const rating = Array.from({ length: 5 }).map((_, index) => {
+                    return {
+                        id: uuidv4(),
+                        totalStar: 5,
+                        currStar: 5 - index,
+                        selected: false,
+                    }
+                })
+
+                setFilterOptions({
+                    collections,
+                    category,
+                    colors,
+                    rating,
+                })
+            }
+        } catch (error) {
+            if (!isCanceled) {
+                throw error;
+            } 
+        }
+        
+        return () => {
+            isCanceled = true;
+        }
+    }, [filterData]);
+
+    return [filterOptions];
 }

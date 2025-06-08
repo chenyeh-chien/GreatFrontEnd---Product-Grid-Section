@@ -1,7 +1,11 @@
 import type { 
   QueryObject,
-  EcommerceProductInfo 
+  EcommerceProductInfo,
+  EcommerceCategories,
+  EcommerceCollections,
+  EcommerceProductInventory
 } from "./types";
+import inventory from "../../assets/files/inventory.json";
 
 
 
@@ -45,6 +49,39 @@ export function fetchEcommerceProductInfo(queryStr?: string):
         .then(response => response.json())
         .then(data => resolve(data))
         .catch(error => reject(error));
+    })
+}
+
+export function fetchEcommerceCategories(): 
+  Promise<EcommerceCategories> {
+    return new Promise((resolve, reject) => {
+      let url =
+        `https://www.greatfrontend.com/api/projects/challenges/e-commerce/categories`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => resolve(data))
+        .catch(error => reject(error));
+    })
+}
+
+export function fetchEcommerceCollections(): 
+  Promise<EcommerceCollections> {
+    return new Promise((resolve, reject) => {
+      let url =
+        `https://www.greatfrontend.com/api/projects/challenges/e-commerce/collections`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => resolve(data))
+        .catch(error => reject(error));
+    })
+}
+
+export function fetchEcommerceInventory(): 
+  Promise<EcommerceProductInventory[]> {
+    return new Promise((resolve, reject) => {
+      resolve(inventory);
     })
 }
 
