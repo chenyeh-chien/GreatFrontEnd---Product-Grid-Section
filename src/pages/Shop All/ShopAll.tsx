@@ -44,6 +44,7 @@ export default function ShopAll() {
 
   function handleChangeFilterOptions(options: FilterOptions) {
     // set queryObj from options
+    console.log(options)
   }
 
   return (

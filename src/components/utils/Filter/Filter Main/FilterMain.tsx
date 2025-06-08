@@ -21,11 +21,17 @@ export default function FilterMain({ options, onChange }: Props) {
   }
 
   function handleChangeColors(color: string) {
-    console.log(color)
+    const colors = structuredClone(options.colors);
+    const index = colors.findIndex((item) => item.color === color);
+    if (index === -1) {
+      return;
+    }
+
+    colors[index].selected = !colors[index].selected;
 
     onChange({
       ...options,
-      
+      colors
     })
   }
 
