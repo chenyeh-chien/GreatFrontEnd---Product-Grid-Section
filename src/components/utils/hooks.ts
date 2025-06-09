@@ -25,10 +25,11 @@ export function useProductInfo(queryObj?: QueryObject) {
         try {
             const fetchProductInfo = async () => {
                 let queryStr: string | undefined;
+
                 if (queryObj) {
                     queryStr = toQueryString(toQueryParams(queryObj));
                 }
-
+                
                 setProductInfo(await fetchEcommerceProductInfo(queryStr));
             }
 
@@ -42,7 +43,7 @@ export function useProductInfo(queryObj?: QueryObject) {
         return () => {
             isCanceled = true;
         }
-    }, [])
+    }, [queryObj])
 
     return [productInfo];
 }
@@ -79,7 +80,7 @@ export function useFilterData() {
     return [filterData]
 }
 
-export function useFilterOptions() {
+export function useFilterOptions(): [FilterOptions | null, (options: FilterOptions) => void] {
     const [filterData] = useFilterData();
     const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
 
@@ -138,5 +139,5 @@ export function useFilterOptions() {
         }
     }, [filterData]);
 
-    return [filterOptions];
+    return [filterOptions, setFilterOptions];
 }

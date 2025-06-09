@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import type { FilterOptions } from "./filterMain";
 import FilterSection from "../Filter Section/FilterSection";
 import Checkbox from "../../Input/Checkbox/Checkbox";
@@ -7,17 +8,49 @@ import RatingButton from "../../Button/Rating/RatingButton";
 interface Props {
   options: FilterOptions
   onChange: (options: FilterOptions) => void;
+  onReset: () => void;
 }
 
-export default function FilterMain({ options, onChange }: Props) {
+export default function FilterMain({ options, onChange, onReset }: Props) {
+  const [appliedFilter, setAppliedFilter] = useState(0);
+
+  useEffect(() => {
+    setAppliedFilter(
+      Object.values(options).reduce((accum, val) => {
+        return accum + val.filter(item => item.selected).length;
+      }, 0)
+    )
+  })
 
   // TODO: handle data change
-  function handleChangeCollections(color: string) {
-    
+  function handleChangeCollections(id: string) {
+    const collections = structuredClone(options.collections);
+    const index = collections.findIndex((item) => item.id === id);
+    if (index === -1) {
+      return;
+    }
+
+    collections[index].selected = !collections[index].selected;
+
+    onChange({
+      ...options,
+      collections
+    })
   }
 
-  function handleChangeCategories(color: string) {
+  function handleChangeCategories(id: string) {
+    const category = structuredClone(options.category);
+    const index = category.findIndex((item) => item.id === id);
+    if (index === -1) {
+      return;
+    }
 
+    category[index].selected = !category[index].selected;
+
+    onChange({
+      ...options,
+      category
+    })
   }
 
   function handleChangeColors(color: string) {
@@ -35,8 +68,19 @@ export default function FilterMain({ options, onChange }: Props) {
     })
   }
 
-  function handleChangeRating(color: string) {
+  function handleChangeRating(id: string) {
+    const rating = structuredClone(options.rating);
+    const index = rating.findIndex((item) => item.id === id);
+    if (index === -1) {
+      return;
+    }
 
+    rating[index].selected = !rating[index].selected;
+
+    onChange({
+      ...options,
+      rating
+    })
   }
 
   return (
@@ -47,8 +91,10 @@ export default function FilterMain({ options, onChange }: Props) {
           return (
             <Checkbox
               key={info.id}
+              id={info.id}
               label={info.name}
-              checked={info.selected}/>
+              checked={info.selected} 
+              onCheck={(id) => handleChangeCollections(id)}/>
           )
         })}
       </FilterSection>
@@ -59,8 +105,10 @@ export default function FilterMain({ options, onChange }: Props) {
           return (
             <Checkbox
               key={info.id}
+              id={info.id}
               label={info.name}
-              checked={info.selected}/>
+              checked={info.selected}
+              onCheck={(id) => handleChangeCategories(id)}/>
           )
         })}
       </FilterSection>
@@ -86,12 +134,24 @@ export default function FilterMain({ options, onChange }: Props) {
           return (
             <RatingButton 
               key={info.id}
+              id={info.id}
               totalStar={info.totalStar}
               currStar={info.currStar}
-              selected={info.selected} />
+              selected={info.selected} 
+              onClick={(id) => handleChangeRating(id)}/>
           )
         })}
       </FilterSection>
+      {appliedFilter > 0 && (
+        <>
+          <hr className="text-neutral-300"/>
+          <button 
+            className="font-medium text-base text-indigo-700"
+            onClick={onReset}>
+            Clear All ({appliedFilter})
+          </button>
+        </>
+      )}
     </aside>
   )
 }

@@ -1,50 +1,41 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { clsx } from 'clsx';
-import { v4 as uuidv4 } from 'uuid';
 import { 
   useProductInfo,
   useFilterOptions,
 } from "../../components/utils/hooks";
 import type { FilterOptions } from "../../components/utils/Filter/Filter Main/filterMain.ts";
 import type { 
-  QueryObject, 
-  EcommerceProductImage 
+  QueryObject,
 } from "../../components/utils/types";
 import { RiFilterLine } from "react-icons/ri";
 import FilterMain from "../../components/utils/Filter/Filter Main/FilterMain.tsx";
 import BaseButton from "../../components/utils/Button/BaseButton";
 import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
 
-type ProductImages = {
-  images: EcommerceProductImage[];
-  id: string;
-}
-
 export default function ShopAll() {
   const [queryObj, setOueryObj] = useState<QueryObject | undefined>(undefined);
   const [productInfo] = useProductInfo(queryObj);
-  const [productImages, setProductImages] = useState<ProductImages[]>([]);
   const [showFilter, setShowFilter] = useState(false);
-  const [filterOptions] = useFilterOptions();
+  const [initialFilterOptions] = useFilterOptions();
+  const [filterOptions, setFilterOptions] = useState(initialFilterOptions);
 
   // const [pageIndex, setPageIndex] = useState(0);
-
   useEffect(() => {
-    if (productInfo !== null && productInfo.data.length > 0) {
-      setProductImages(
-        productInfo.data.map(item => {
-          return {
-            images: item.images,
-            id: uuidv4()
-          }
-        })
-      );
+    // TODO: handle reset filter option
+    if (initialFilterOptions !== null) {
+      setFilterOptions(initialFilterOptions);
     }
-  }, [productInfo]); 
+  }, [initialFilterOptions, setFilterOptions])
 
   function handleChangeFilterOptions(options: FilterOptions) {
-    // set queryObj from options
-    console.log(options)
+    setFilterOptions(options);
+    setOueryObj({
+      collection: options.collections.filter(item => item.selected).map(item => item.id),
+      category: options.category.filter(item => item.selected).map(item => item.id),
+      color: options.colors.filter(item => item.selected).map(item => item.color),
+      rating: options.rating.filter(item => item.selected).map(item => item.currStar)
+    })
   }
 
   return (
@@ -55,7 +46,8 @@ export default function ShopAll() {
       {showFilter && filterOptions !== null && (
         <FilterMain 
           options={filterOptions} 
-          onChange={(options: FilterOptions) => handleChangeFilterOptions(options)}/>
+          onChange={(options: FilterOptions) => handleChangeFilterOptions(options)}
+          onReset={() => setFilterOptions(initialFilterOptions)}/>
       )}
       <div className={clsx(
         'flex flex-col grow gap-12 self-stretch',
@@ -77,16 +69,16 @@ export default function ShopAll() {
           'xl:grid-cols-[repeat(auto-fit,280px)]',
           'gap-8 justify-between self-stretch'
         )}>
-          {productImages.map((item, index) => {
+          {productInfo && productInfo.data && productInfo.data.map(item => {
             return (
             <ProductCard 
-              key={item.id}
-              productName={productInfo!.data[index].name}
-              description={productInfo!.data[index].description}
+              key={item.product_id}
+              productName={item.name}
+              description={item.description}
               productImages={item.images}
-              colors={productInfo!.data[index].colors}
-              listPrice={productInfo!.data[index].inventory[0].list_price}
-              salePrice={productInfo!.data[index].inventory[0].sale_price}/>
+              colors={item.colors}
+              listPrice={item.inventory[0].list_price}
+              salePrice={item.inventory[0].sale_price}/>
             )
           })}
         </main>

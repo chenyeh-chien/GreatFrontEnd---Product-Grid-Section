@@ -1,15 +1,19 @@
 import { clsx } from "clsx";
 
 interface Props {
+  id: string;
   label: string;
   checked?: boolean;
   disabled?: boolean;
+  onCheck: (id: string) => void;
 }
 
 export default function Checkbox({
+  id,
   label,
   checked,
-  disabled
+  disabled,
+  onCheck
 }: Props) {
   return (
     <label className={clsx(
@@ -25,7 +29,8 @@ export default function Checkbox({
             "disabled:bg-neutral-200"
           )}
           type="checkbox" 
-          disabled={disabled}/>
+          disabled={disabled}
+          onChange={() => onCheck(id)}/>
       </div>
       {label}
     </label>

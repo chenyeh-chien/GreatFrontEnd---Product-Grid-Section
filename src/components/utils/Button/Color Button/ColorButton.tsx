@@ -17,10 +17,7 @@ export default function ColorButton({
     color: string
   ) {
     event.preventDefault();
-    if (selected) {
-        return;
-    }
-
+    
     onChangeColorIndex(color);
   }
 
