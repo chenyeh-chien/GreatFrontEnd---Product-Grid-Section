@@ -12,6 +12,7 @@ import type {
 import { RiFilterLine } from "react-icons/ri";
 import FilterMain from "../../components/utils/Filter/Filter Main/FilterMain.tsx";
 import BaseButton from "../../components/utils/Button/BaseButton";
+import DropdownButton from "../../components/utils/Button/Dropdown/DropdownButton.tsx";
 import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
 
 export default function ShopAll() {
@@ -87,6 +88,8 @@ export default function ShopAll() {
             </BaseButton>
           }
           </div>
+          <DropdownButton 
+            text="Sort by"/>
         </header>
         <main className={clsx(
           'md:grid md:grid-cols-[repeat(auto-fit,336px)]',
