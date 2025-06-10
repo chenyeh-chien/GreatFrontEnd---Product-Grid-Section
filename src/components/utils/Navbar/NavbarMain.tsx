@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
 import { RiShoppingBag3Line } from "react-icons/ri";
 import { BsList } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 import { clsx } from "clsx";
 import type { NavbarLink } from "../types";
+import { useOverflowHidden } from "../hooks";
 import appIcon from '../../../assets/stylenest.svg';
 
 const links: NavbarLink[] = [{
@@ -19,29 +19,7 @@ const links: NavbarLink[] = [{
 }];
 
 export default function NavbarMain() {
-  const [showLinks, setShowLinks] = useState(false);
-
-  useEffect(() => {
-    if (showLinks) {
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-
-    window.addEventListener('resize', handleWindowResize);
-
-    return () => {
-      document.body.classList.remove("overflow-hidden");
-    }
-  }, [showLinks]);
-
-  function handleWindowResize(event: UIEvent) {
-    event.preventDefault();
-
-    if (showLinks) {
-      setShowLinks(false);
-    }
-  }
+  const [showLinks, setShowLinks] = useOverflowHidden(document.body);
 
   return (
     <header className="flex flex-col px-4 md:px-8 w-full bg-white">
@@ -72,11 +50,10 @@ export default function NavbarMain() {
         <div className="flex gap-4">
           {
             showLinks
-            ? <button>
+            ? <button onClick={() => setShowLinks(false)}>
                 <RxCross2
                   className="w-6 h-6 hover:cursor-pointer"
-                  aria-label="Close navigation menu"
-                  onClick={() => setShowLinks(false)}/>
+                  aria-label="Close navigation menu" />
               </button>
             : (
               <>
@@ -85,11 +62,10 @@ export default function NavbarMain() {
                     className="w-6 h-6 hover:cursor-pointer"
                     aria-label="View shopping cart"/>
                 </button>
-                <button>
+                <button onClick={() => setShowLinks(true)}>
                   <BsList 
                     className="w-6 h-6 hover:cursor-pointer xl:hidden"
-                    aria-label="Open navigation menu"
-                    onClick={() => setShowLinks(true)}/>
+                    aria-label="Open navigation menu" />
                 </button>
               </>
             )
@@ -101,7 +77,7 @@ export default function NavbarMain() {
           'fixed left-0 h-full px-4 py-[68px]',
           'opacity-0 duration-300 ease-in-out -translate-x-full',
           showLinks && 'opacity-100 translate-x-0',
-          'bg-white w-full'
+          'bg-white w-full overflow-y-auto'
         )}
         aria-label="Mobile navigation menu">
         <ul className="flex flex-col gap-2 self-stretch">

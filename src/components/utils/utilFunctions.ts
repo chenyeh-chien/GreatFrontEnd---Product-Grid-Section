@@ -55,7 +55,7 @@ export function fetchEcommerceProductInfo(queryStr?: string):
 export function fetchEcommerceCategories(): 
   Promise<EcommerceCategories> {
     return new Promise((resolve, reject) => {
-      let url =
+      const url =
         `https://www.greatfrontend.com/api/projects/challenges/e-commerce/categories`;
 
       fetch(url)
@@ -68,7 +68,7 @@ export function fetchEcommerceCategories():
 export function fetchEcommerceCollections(): 
   Promise<EcommerceCollections> {
     return new Promise((resolve, reject) => {
-      let url =
+      const url =
         `https://www.greatfrontend.com/api/projects/challenges/e-commerce/collections`;
 
       fetch(url)
@@ -80,7 +80,7 @@ export function fetchEcommerceCollections():
 
 export function fetchEcommerceInventory(): 
   Promise<EcommerceProductInventory[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       resolve(inventory);
     })
 }

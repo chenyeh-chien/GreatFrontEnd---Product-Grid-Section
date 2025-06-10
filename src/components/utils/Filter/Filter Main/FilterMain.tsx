@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { RxCross2 } from "react-icons/rx";
 import type { FilterOptions } from "./filterMain";
 import FilterSection from "../Filter Section/FilterSection";
 import Checkbox from "../../Input/Checkbox/Checkbox";
@@ -9,9 +10,10 @@ interface Props {
   options: FilterOptions
   onChange: (options: FilterOptions) => void;
   onReset: () => void;
+  onClose: () => void;
 }
 
-export default function FilterMain({ options, onChange, onReset }: Props) {
+export default function FilterMain({ options, onChange, onReset, onClose }: Props) {
   const [appliedFilter, setAppliedFilter] = useState(0);
 
   useEffect(() => {
@@ -20,7 +22,7 @@ export default function FilterMain({ options, onChange, onReset }: Props) {
         return accum + val.filter(item => item.selected).length;
       }, 0)
     )
-  })
+  }, [options, setAppliedFilter])
 
   // TODO: handle data change
   function handleChangeCollections(id: string) {
@@ -84,7 +86,18 @@ export default function FilterMain({ options, onChange, onReset }: Props) {
   }
 
   return (
-    <aside className="w-[248px] flex flex-col gap-6">
+    <aside className="flex flex-col gap-6 w-full h-max xl:w-[248px]">
+      <div className="flex gap-2 items-center self-stretch justify-between">
+        <h1 className="font-normal text-xl text-neutral-900">
+          Filter
+        </h1>
+        <button onClick={onClose}>
+          <RxCross2
+            className="w-6 h-6 hover:cursor-pointer"
+            aria-label="Close filter menu" />
+        </button>
+      </div>
+      <hr className="text-neutral-300"/>
       <FilterSection
         name="Collections">
         {options.collections.map(info => {
@@ -146,7 +159,7 @@ export default function FilterMain({ options, onChange, onReset }: Props) {
         <>
           <hr className="text-neutral-300"/>
           <button 
-            className="font-medium text-base text-indigo-700"
+            className="font-medium text-base text-indigo-700 hover:cursor-pointer"
             onClick={onReset}>
             Clear All ({appliedFilter})
           </button>

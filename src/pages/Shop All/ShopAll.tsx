@@ -3,6 +3,7 @@ import { clsx } from 'clsx';
 import { 
   useProductInfo,
   useFilterOptions,
+  useOverflowHidden
 } from "../../components/utils/hooks";
 import type { FilterOptions } from "../../components/utils/Filter/Filter Main/filterMain.ts";
 import type { 
@@ -19,10 +20,10 @@ export default function ShopAll() {
   const [showFilter, setShowFilter] = useState(false);
   const [initialFilterOptions] = useFilterOptions();
   const [filterOptions, setFilterOptions] = useState(initialFilterOptions);
+  const [mobileFilter, setMobileFilter] = useOverflowHidden(document.body);
 
   // const [pageIndex, setPageIndex] = useState(0);
   useEffect(() => {
-    // TODO: handle reset filter option
     if (initialFilterOptions !== null) {
       setFilterOptions(initialFilterOptions);
     }
@@ -38,16 +39,27 @@ export default function ShopAll() {
     })
   }
 
+  function resetFilterOptions() {
+    if (initialFilterOptions === null) {
+      return;
+    }
+
+    handleChangeFilterOptions(initialFilterOptions);
+  }
+
   return (
     <div className={clsx(
       "flex gap-16 self-stretch px-3 py-12 ",
       "md:px-4 md:py-16 xl:p-24"
     )}>
       {showFilter && filterOptions !== null && (
-        <FilterMain 
-          options={filterOptions} 
-          onChange={(options: FilterOptions) => handleChangeFilterOptions(options)}
-          onReset={() => setFilterOptions(initialFilterOptions)}/>
+        <div className="hidden xl:block">
+          <FilterMain 
+            options={filterOptions} 
+            onChange={(options: FilterOptions) => handleChangeFilterOptions(options)}
+            onReset={resetFilterOptions}
+            onClose={() => setShowFilter(false)}/>
+        </div>
       )}
       <div className={clsx(
         'flex flex-col grow gap-12 self-stretch',
@@ -55,6 +67,7 @@ export default function ShopAll() {
       )}>
         <header 
           className="flex items-center gap-4 self-stretch justify-between">
+          <div className="hidden xl:block">
           {
             !showFilter && 
             <BaseButton
@@ -63,6 +76,17 @@ export default function ShopAll() {
               <RiFilterLine />
             </BaseButton>
           }
+          </div>
+          <div className="block xl:hidden">
+          {
+            !mobileFilter && 
+            <BaseButton
+              text="Filter"
+              onClick={() => setMobileFilter(true)}>
+              <RiFilterLine />
+            </BaseButton>
+          }
+          </div>
         </header>
         <main className={clsx(
           'md:grid md:grid-cols-[repeat(auto-fit,336px)]',
@@ -82,6 +106,20 @@ export default function ShopAll() {
             )
           })}
         </main>
+      </div>
+      <div className={clsx(
+        'fixed top-0 left-0 bg-white w-full h-full',
+        'opacity-0 duration-300 ease-in-out -translate-x-full',
+        mobileFilter && 'opacity-100 translate-x-0',
+        'p-6 flex justify-center z-30 overflow-y-auto'
+      )}>
+        {mobileFilter && filterOptions !== null && (
+          <FilterMain 
+            options={filterOptions} 
+            onChange={(options: FilterOptions) => handleChangeFilterOptions(options)}
+            onReset={resetFilterOptions}
+            onClose={() => setMobileFilter(false)}/>
+        )}
       </div>
     </div>
   )

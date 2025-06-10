@@ -30,6 +30,7 @@ export default function Checkbox({
           )}
           type="checkbox" 
           disabled={disabled}
+          checked={checked}
           onChange={() => onCheck(id)}/>
       </div>
       {label}
