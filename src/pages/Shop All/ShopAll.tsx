@@ -1,27 +1,66 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { clsx } from 'clsx';
 import { 
   useProductInfo,
   useFilterOptions,
-  useOverflowHidden
+  useOverflowHidden,
+  useSortOption
 } from "../../components/utils/hooks";
 import type { FilterOptions } from "../../components/utils/Filter/Filter Main/filterMain.ts";
+import type { DropdownInfo } from "../../components/utils/Dropdown/dropdown.ts";
 import type { 
   QueryObject,
 } from "../../components/utils/types";
 import { RiFilterLine } from "react-icons/ri";
 import FilterMain from "../../components/utils/Filter/Filter Main/FilterMain.tsx";
 import BaseButton from "../../components/utils/Button/BaseButton";
-import DropdownButton from "../../components/utils/Button/Dropdown/DropdownButton.tsx";
+import Dropdown from "../../components/utils/Dropdown/Dropdown.tsx";
 import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
 
+const initialSortOptions = [{
+  id: "1",
+  text: "Newest",
+  selected: true,
+},
+{
+  id: "2",
+  text: "Best rating",
+  selected: false,
+},
+{
+  id: "3",
+  text: "Most popular",
+  selected: false,
+},
+{
+  id: "4",
+  text: "Price: Low to high",
+  selected: false,
+},
+{
+  id: "5",
+  text: "Price: High to low",
+  selected: false,
+}]
+
+const initialQueryObj = {}
+
 export default function ShopAll() {
-  const [queryObj, setOueryObj] = useState<QueryObject | undefined>(undefined);
-  const [productInfo] = useProductInfo(queryObj);
+  const [filterQueryObj, setFilterOueryObj] = useState<QueryObject | undefined>(initialQueryObj);
+  const [sortQueryObj, dispatchSortOption] = useSortOption();
   const [showFilter, setShowFilter] = useState(false);
   const [initialFilterOptions] = useFilterOptions();
   const [filterOptions, setFilterOptions] = useState(initialFilterOptions);
+  const [sortOptions, setSortOptions] = useState<DropdownInfo[]>(initialSortOptions)
   const [mobileFilter, setMobileFilter] = useOverflowHidden(document.body);
+
+  const queryObj = useMemo(() => {
+    return {
+      ...filterQueryObj,
+      ...sortQueryObj
+    }
+  }, [filterQueryObj, sortQueryObj])
+  const [productInfo] = useProductInfo(queryObj);
 
   // const [pageIndex, setPageIndex] = useState(0);
   useEffect(() => {
@@ -32,7 +71,7 @@ export default function ShopAll() {
 
   function handleChangeFilterOptions(options: FilterOptions) {
     setFilterOptions(options);
-    setOueryObj({
+    setFilterOueryObj({
       collection: options.collections.filter(item => item.selected).map(item => item.id),
       category: options.category.filter(item => item.selected).map(item => item.id),
       color: options.colors.filter(item => item.selected).map(item => item.color),
@@ -46,6 +85,26 @@ export default function ShopAll() {
     }
 
     handleChangeFilterOptions(initialFilterOptions);
+  }
+
+  function handleSelectSortOption(id: string) {
+    const updatedOptions = structuredClone(sortOptions.map(option => {
+      return {
+        ...option,
+        selected: false
+      }
+    }));
+    const index = updatedOptions.findIndex(item => item.id === id);
+
+    if (index === -1) {
+      return;
+    }
+    
+
+    updatedOptions[index].selected = true;
+
+    dispatchSortOption({ type: updatedOptions[index].text });
+    setSortOptions(updatedOptions);
   }
 
   return (
@@ -88,8 +147,10 @@ export default function ShopAll() {
             </BaseButton>
           }
           </div>
-          <DropdownButton 
-            text="Sort by"/>
+          <Dropdown 
+            text="Sort by"
+            options={sortOptions}
+            onSelect={handleSelectSortOption}/>
         </header>
         <main className={clsx(
           'md:grid md:grid-cols-[repeat(auto-fit,336px)]',

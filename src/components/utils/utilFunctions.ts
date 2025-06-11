@@ -43,6 +43,7 @@ export function fetchEcommerceProductInfo(queryStr?: string):
       
       if (queryStr) {
         url = `${url}?${queryStr}`;
+        console.log(url)
       }
 
       fetch(url)

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import type { FilterOptions } from "./Filter/Filter Main/filterMain.ts";
 import type { 
@@ -170,4 +170,29 @@ export function useOverflowHidden(element: HTMLElement):
     }, [element, hidden, setHidden]);
 
     return [hidden, setHidden]
+}
+
+export function useSortOption(): 
+    [QueryObject, (action: { type: string }) => void]  {
+    // TODO: fix the type of reducer
+    const [state, dispatch] = useReducer(reducer, { sort: ["created"] });
+
+    function reducer(state: QueryObject, action: { type: string }) {
+        switch (action.type) {
+            case "Newest": 
+                return { sort: ["created"] }
+            case "Best rating": 
+                return { sort: ["rating"] }
+            case "Most popular": 
+                return { sort: ["popularity"] }
+            case "Price: Low to high": 
+                return { sort: ["price"], direction: ["asc"] }
+            case "Price: High to low": 
+                return { sort: ["price"] }
+            default: 
+                throw Error(`Unknown type: ${action.type}`);
+        }
+    }
+
+    return [state, dispatch];
 }
