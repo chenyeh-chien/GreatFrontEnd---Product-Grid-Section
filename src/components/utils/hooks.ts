@@ -180,15 +180,15 @@ export function useSortOption():
     function reducer(_state: QueryObject, action: { type: string }) {
         switch (action.type) {
             case "Newest": 
-                return { sort: ["created"] }
+                return { sort: ["created"], direction: [] }
             case "Best rating": 
-                return { sort: ["rating"] }
+                return { sort: ["rating"], direction: [] }
             case "Most popular": 
-                return { sort: ["popularity"] }
+                return { sort: ["popularity"], direction: [] }
             case "Price: Low to high": 
                 return { sort: ["price"], direction: ["asc"] }
             case "Price: High to low": 
-                return { sort: ["price"] }
+                return { sort: ["price"], direction: [] }
             default: 
                 throw Error(`Unknown type: ${action.type}`);
         }
