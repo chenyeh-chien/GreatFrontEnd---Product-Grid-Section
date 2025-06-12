@@ -196,3 +196,38 @@ export function useSortOption():
 
     return [state, dispatch];
 }
+
+export function useEscape(
+    setIsOpen: (offset: React.SetStateAction<boolean>) => void
+) {
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                setIsOpen(false);
+            }
+        };
+        
+        document.addEventListener("keydown", handleEscape);
+        return () => {
+            document.removeEventListener("keydown", handleEscape);
+        }
+    }, [setIsOpen])
+}
+
+export function useClickOutside(
+    setIsOpen: (offset: React.SetStateAction<boolean>) => void,
+    ref: React.RefObject<HTMLElement | null>
+) {
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (ref.current && !ref.current.contains(e.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    }, [setIsOpen, ref])
+}

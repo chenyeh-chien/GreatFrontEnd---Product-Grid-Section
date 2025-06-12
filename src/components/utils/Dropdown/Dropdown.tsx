@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useFloating, offset, flip, shift, autoUpdate } from "@floating-ui/react";
 import type { DropdownInfo } from "./dropdown.ts";
+import { 
+  useEscape,
+  useClickOutside
+} from "../hooks.ts";
 import DropdownButton from "../Button/Dropdown/DropdownButton";
 import DropdownList from "./DropdownList";
 
@@ -11,15 +15,24 @@ interface Props {
 }
 
 export default function Dropdown({ text, options, onSelect }: Props) {
+  const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  useEscape(setIsOpen);
+  useClickOutside(setIsOpen, dropdownRef);
+
   const { refs, floatingStyles } = useFloating({
     placement: 'bottom-start',
     middleware: [offset(6), flip(), shift()],
     whileElementsMounted: autoUpdate,
   });
 
+  function handleSelectOption(id: string) {
+    onSelect(id);
+    setIsOpen(false);
+  }
+
   return (
-    <div>
+    <div ref={dropdownRef}>
       <DropdownButton 
         setReference={refs.setReference}
         text={text}
@@ -30,9 +43,8 @@ export default function Dropdown({ text, options, onSelect }: Props) {
           setFloating={refs.setFloating}
           floatingStyles={floatingStyles}
           options={options}
-          onSelect={(id) => onSelect(id)}/>
+          onSelect={(id) => handleSelectOption(id)}/>
       )}
     </div>
-    
   )
 }

@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { clsx } from "clsx";
 
 interface Props {
@@ -13,8 +14,26 @@ export default function DropdownItem({
   selected, 
   onSelect 
 }: Props) {
+  const itemRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+            onSelect(id);
+        }
+    };
+    
+    const current = itemRef.current;
+    current?.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      current?.addEventListener("keydown", handleKeyDown);
+    }
+  }, [id, onSelect])
+
   return (
     <li 
+      ref={itemRef}
       className={clsx(
         "text-sm p-2 rounded",
         "hover:bg-neutral-50 hover:cursor-pointer",
@@ -22,6 +41,7 @@ export default function DropdownItem({
         "disabled:text-neutral-400", 
         selected ? "font-medium text-indigo-700" : "font-normal text-neutral-600", 
       )}
+      role="menuitem"
       tabIndex={0}
       onClick={() => onSelect(id)}>
       {option}

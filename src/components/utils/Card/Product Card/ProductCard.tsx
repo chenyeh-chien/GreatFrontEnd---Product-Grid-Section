@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { clsx } from "clsx";
 import { v4 as uuidv4 } from 'uuid';
 import type { EcommerceProductImage } from '../../types';
 import { capitalize } from '../../utilFunctions';
@@ -28,6 +29,7 @@ export default React.memo(function ProductCard({
 }: Props) {
   const [itemIndex, setItemIndex] = useState(0);
   const [colorList, setColorList] = useState<colorInfo[]>([]);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     setColorList(colors.map(item => {
@@ -36,7 +38,7 @@ export default React.memo(function ProductCard({
         id: uuidv4()
       }
     }))
-  }, []); 
+  }, [colors, setColorList]); 
 
   function handleChangeColorIndex(color: string) {
     const index = productImages.findIndex((item) => item.color === color);
@@ -49,11 +51,16 @@ export default React.memo(function ProductCard({
 
   return (
     <figure className='flex flex-col flex-grow md:w-[336px] md:flex-grow-0 xl:w-[280px]'>
+      {!imageLoaded && <div className="self-stretch h-[300px] bg-gray-200 rounded-lg animate-pulse" />}
       <img 
-        className='self-stretch h-[300px] rounded-lg object-cover'
+        className={clsx(
+          'self-stretch h-[300px] rounded-lg object-cover',
+          imageLoaded ? "opacity-100" : "opacity-0"
+        )}
         src={productImages[itemIndex].image_url}
         alt={description}
         loading="lazy"
+        onLoad={() => setImageLoaded(true)}
         title={productName}/>
       <div className='flex flex-col gap-3 self-stretch h-[168px] py-4'>
         <div>

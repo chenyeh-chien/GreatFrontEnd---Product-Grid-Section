@@ -18,6 +18,7 @@ export default function DropdownList({ options, floatingStyles, setFloating, onS
         "rounded-lg border border-solid border-neutral-200"
       )}
       style={floatingStyles}
+      role="menu"
       ref={setFloating}>
       {options.map(option => {
         return (
