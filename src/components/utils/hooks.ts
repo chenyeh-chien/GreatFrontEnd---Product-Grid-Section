@@ -177,7 +177,7 @@ export function useSortOption():
     // TODO: fix the type of reducer
     const [state, dispatch] = useReducer(reducer, { sort: ["created"] });
 
-    function reducer(state: QueryObject, action: { type: string }) {
+    function reducer(_state: QueryObject, action: { type: string }) {
         switch (action.type) {
             case "Newest": 
                 return { sort: ["created"] }

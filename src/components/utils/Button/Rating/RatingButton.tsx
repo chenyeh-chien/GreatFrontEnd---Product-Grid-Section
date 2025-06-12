@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { IoIosStar } from "react-icons/io";
 import { clsx } from "clsx";
 
@@ -17,8 +16,6 @@ export default function RatingButton({
   selected, 
   onClick 
 }: Props) {
-  const [isHover, setIsHover] = useState(false);
-
   return (
     <button 
       className={clsx(
@@ -27,8 +24,6 @@ export default function RatingButton({
         "focus:border-indigo-200 focus:outline-none",
         "hover:cursor-pointer"
       )}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
       onClick={() => onClick(id)}>
       {Array.from({ length: totalStar }).map((_, index) => {
         return (
