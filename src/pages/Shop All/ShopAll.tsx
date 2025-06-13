@@ -16,6 +16,7 @@ import FilterMain from "../../components/utils/Filter/Filter Main/FilterMain.tsx
 import BaseButton from "../../components/utils/Button/BaseButton";
 import Dropdown from "../../components/utils/Dropdown/Dropdown.tsx";
 import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
+import FilterFallback from "../../components/utils/Fallback/FilterFallback.tsx";
 
 const initialSortOptions = [{
   id: "1",
@@ -152,24 +153,32 @@ export default function ShopAll() {
             options={sortOptions}
             onSelect={handleSelectSortOption}/>
         </header>
-        <main className={clsx(
-          'md:grid md:grid-cols-[repeat(auto-fit,336px)]',
-          'xl:grid-cols-[repeat(auto-fit,280px)]',
-          'gap-8 justify-between self-stretch'
-        )}>
-          {productInfo && productInfo.data && productInfo.data.map(item => {
-            return (
-            <ProductCard 
-              key={item.product_id}
-              productName={item.name}
-              description={item.description}
-              productImages={item.images}
-              colors={item.colors}
-              listPrice={item.inventory[0].list_price}
-              salePrice={item.inventory[0].sale_price}/>
-            )
-          })}
-        </main>
+        {productInfo && (
+          productInfo.data.length > 0
+          ? (
+              <main className={clsx(
+                'md:grid md:grid-cols-[repeat(auto-fit,336px)]',
+                'xl:grid-cols-[repeat(auto-fit,280px)]',
+                'gap-8 justify-between self-stretch'
+              )}>
+                {productInfo && productInfo.data && productInfo.data.map(item => {
+                  return (
+                  <ProductCard 
+                    key={item.product_id}
+                    productName={item.name}
+                    description={item.description}
+                    productImages={item.images}
+                    colors={item.colors}
+                    listPrice={item.inventory[0].list_price}
+                    salePrice={item.inventory[0].sale_price}/>
+                  )
+                })}
+              </main>)
+          : (
+            <FilterFallback 
+              onReset={resetFilterOptions}/>
+          )
+        )}
       </div>
       <div className={clsx(
         'fixed top-0 left-0 bg-white w-full h-full',

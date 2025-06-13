@@ -14,7 +14,7 @@ export default function DropdownButton({ text, isOpen, setIsOpen, setReference }
   return (
     <button 
       className={clsx(
-        "relative flex justify-center items-center gap-1",
+        "flex justify-center items-center gap-1",
         "px-3.5 py-2.5 bg-white",
         "rounded border-[0.5px] border-solid border-neutral-200",
         "hover:bg-neutral-50 hover:cursor-pointer disabled:text-neutral-400",

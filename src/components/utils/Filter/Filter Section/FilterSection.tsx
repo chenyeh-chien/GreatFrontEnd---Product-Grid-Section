@@ -13,6 +13,23 @@ export default function FilterSection({
   children 
 }: Props) {
   const [isExtending, setIsExtending] = useState(true);
+  const [showContent, setShowContent] = useState(true);
+
+  function handleExtendContent() {
+    const targetVal = !isExtending;
+    
+    if (targetVal) {
+      setShowContent(true);
+    }
+
+    setIsExtending(targetVal)
+  }
+
+  function handleDisplayContent() {
+    if (showContent) {
+      setShowContent(!showContent);
+    }
+  }
 
   return (
     <section className="flex flex-col gap-6 self-stretch">
@@ -20,19 +37,22 @@ export default function FilterSection({
         <h1 className="font-medium text-base text-neutral-900">{name}</h1>
         <button 
           className="flex justify-center items-center w-6 h-6 hover:cursor-pointer"
-          onClick={() => setIsExtending(!isExtending)}>
-        {
-          isExtending 
-          ? <FaMinus className="w-5 h-5"/>
-          : <FaPlus className="w-5 h-5"/>
-        }
+          onClick={handleExtendContent}>
+          {
+            isExtending 
+            ? <FaMinus className="w-5 h-5"/>
+            : <FaPlus className="w-5 h-5"/>
+          }
         </button>
       </div>
       <div 
         className={clsx(
           "flex flex-col gap-6 self-stretch",
-          !isExtending && "hidden"
-        )}>
+          "duration-300 ease-in-out",
+          isExtending ? "opacity-100 h-full" : "opacity-0 h-0",
+          !showContent && "hidden",
+        )}
+        onTransitionEnd={handleDisplayContent}>
         {children}
       </div>
     </section>
