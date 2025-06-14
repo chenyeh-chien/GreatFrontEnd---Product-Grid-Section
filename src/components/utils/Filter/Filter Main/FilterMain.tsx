@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 import type { FilterOptions } from "./filterMain";
 import FilterSection from "../Filter Section/FilterSection";
@@ -14,15 +14,11 @@ interface Props {
 }
 
 export default function FilterMain({ options, onChange, onReset, onClose }: Props) {
-  const [appliedFilter, setAppliedFilter] = useState(0);
-
-  useEffect(() => {
-    setAppliedFilter(
-      Object.values(options).reduce((accum, val) => {
-        return accum + val.filter(item => item.selected).length;
-      }, 0)
-    )
-  }, [options, setAppliedFilter])
+  const appliedFilter = useMemo(() => {
+    return Object.values(options).reduce((accum, val) => {
+      return accum + val.filter(item => item.selected).length;
+    }, 0)
+  }, [options])
 
   // TODO: handle data change
   function handleChangeCollections(id: string) {

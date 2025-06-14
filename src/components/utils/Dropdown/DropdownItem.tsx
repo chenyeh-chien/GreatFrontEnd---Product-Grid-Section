@@ -27,7 +27,7 @@ export default function DropdownItem({
     current?.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      current?.addEventListener("keydown", handleKeyDown);
+      current?.removeEventListener("keydown", handleKeyDown);
     }
   }, [id, onSelect])
 

@@ -34,7 +34,8 @@ export default function NavbarMain() {
           aria-label="Homepage">
           <img 
             src={appIcon}
-            alt="App logo" />
+            alt="App logo" 
+            loading="lazy"/>
         </NavLink>
         <ul className="hidden xl:flex xl:gap-8 xl:flex-grow-1">
           {links.map(info => {
