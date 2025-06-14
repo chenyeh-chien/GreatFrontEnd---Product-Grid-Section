@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo } from "react";
 import { RxCross2 } from "react-icons/rx";
 import type { FilterOptions } from "./filterMain";
 import FilterSection from "../Filter Section/FilterSection";
