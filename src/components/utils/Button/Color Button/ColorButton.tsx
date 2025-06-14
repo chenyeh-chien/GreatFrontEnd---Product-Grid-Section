@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
 import { clsx } from 'clsx';
-import { FaRegCheckCircle } from "react-icons/fa";
+import { IoIosCheckmark } from "react-icons/io";
 
 interface Props {
     color: string;
@@ -13,11 +12,6 @@ export default function ColorButton({
   selected,
   onChangeColorIndex 
 }: Props) {
-  useEffect(() => {
-    console.log(color);
-
-  }, [color])
-
   function handleSelectColor(
     event: React.MouseEvent, 
     color: string
@@ -46,12 +40,12 @@ export default function ColorButton({
         style={{backgroundColor: color}}
         onClick={(e) => handleSelectColor(e, color)}>
         {selected && (
-          <FaRegCheckCircle 
+          <IoIosCheckmark 
             className={clsx(
               'text-base text-center',
               getCheckIconColor(color) === 'white' 
               ? 'text-white'
-              : 'text-neutral-300'
+              : 'text-neutral-500'
             )}/>
           )
         }

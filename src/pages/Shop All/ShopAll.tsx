@@ -103,7 +103,6 @@ export default function ShopAll() {
     
 
     updatedOptions[index].selected = true;
-
     dispatchSortOption({ type: updatedOptions[index].text });
     setSortOptions(updatedOptions);
   }

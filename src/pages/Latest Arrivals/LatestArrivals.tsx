@@ -1,32 +1,11 @@
-import { useState, useEffect } from "react";
 import { clsx } from 'clsx';
-import { v4 as uuidv4 } from 'uuid';
 import { useProductInfo } from "../../components/utils/hooks";
-import type { EcommerceProductImage } from "../../components/utils/types";
+import BaseButton from "../../components/utils/Button/BaseButton";
 import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
-
-type ProductImages = {
-  images: EcommerceProductImage[];
-  id: string;
-}
 
 export default function ProductGridSection() {
   const [productInfo] = useProductInfo();
-  const [productImages, setProductImages] = useState<ProductImages[]>([]);
   // const [pageIndex, setPageIndex] = useState(0);
-
-  useEffect(() => {
-    if (productInfo !== null && productInfo.data.length > 0) {
-      setProductImages(
-        productInfo.data.map(item => {
-          return {
-            images: item.images,
-            id: uuidv4()
-          }
-        })
-      );
-    }
-  }, [productInfo]); 
 
   return (
     <div className={clsx(
@@ -39,13 +18,8 @@ export default function ProductGridSection() {
           Latest Arrivals
         </h1>
         <div>
-          <button className={clsx(
-            'font-medium bg-white border-[0.5px]',
-            'border-solid border-neutral-200 rounded',
-            'rounded px-4 py-2.5 hover:cursor-pointer'
-          )}>
-            View all
-          </button>
+          <BaseButton 
+            text="View all"/>
         </div>
       </header>
       <main className={clsx(
@@ -53,16 +27,16 @@ export default function ProductGridSection() {
         'xl:grid-cols-[repeat(auto-fit,280px)]',
         'gap-8 justify-between self-stretch'
       )}>
-        {productImages.map((item, index) => {
+        {productInfo && productInfo.data && productInfo.data.map(item => {
           return (
           <ProductCard 
-            key={item.id}
-            productName={productInfo!.data[index].name}
-            description={productInfo!.data[index].description}
+            key={item.product_id}
+            productName={item.name}
+            description={item.description}
             productImages={item.images}
-            colors={productInfo!.data[index].colors}
-            listPrice={productInfo!.data[index].inventory[0].list_price}
-            salePrice={productInfo!.data[index].inventory[0].sale_price}/>
+            colors={item.colors}
+            listPrice={item.inventory[0].list_price}
+            salePrice={item.inventory[0].sale_price}/>
           )
         })}
       </main>
