@@ -4,7 +4,8 @@ import type { FilterOptions } from "./Filter/Filter Main/filterMain.ts";
 import type { 
   QueryObject,
   EcommerceProductInfo,
-  EcommerceFilterData
+  EcommerceFilterData,
+  EcommerceProductItem
 } from "./types";
 import { 
   toQueryParams, 
@@ -12,7 +13,8 @@ import {
   fetchEcommerceProductInfo,
   fetchEcommerceCategories,
   fetchEcommerceCollections,
-  fetchEcommerceInventory
+  fetchEcommerceInventory,
+  fetchEcommerceProductByID
 } from "./utilFunctions";
 
 export function useProductInfo(queryObj?: QueryObject) {
@@ -46,6 +48,37 @@ export function useProductInfo(queryObj?: QueryObject) {
   }, [queryObj])
 
   return [productInfo];
+}
+
+export function useProductDetails(productID: string | null) {
+  const [productDetails, setProductDetails] = 
+    useState<EcommerceProductItem | null>(null);
+
+  useEffect(() => {
+    let isCanceled = false;
+
+    try {
+      const fetchProductDetails = async () => {
+        if (productID === null) {
+          return;
+        }
+
+        setProductDetails(await fetchEcommerceProductByID(productID));
+      }
+
+      fetchProductDetails();
+    } catch(error) {
+      if (!isCanceled) {
+        throw error;
+      } 
+    }
+
+    return () => {
+      isCanceled = true;
+    }
+  }, [productID])
+
+  return productDetails;
 }
 
 export function useFilterData() {

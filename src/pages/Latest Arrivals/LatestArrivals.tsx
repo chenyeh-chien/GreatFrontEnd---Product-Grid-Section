@@ -31,6 +31,7 @@ export default function ProductGridSection() {
           return (
           <ProductCard 
             key={item.product_id}
+            productID={item.product_id}
             productName={item.name}
             description={item.description}
             productImages={item.images}

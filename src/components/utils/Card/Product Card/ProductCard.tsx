@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router";
 import { clsx } from "clsx";
 import { v4 as uuidv4 } from 'uuid';
 import type { EcommerceProductImage } from '../../types';
@@ -6,6 +7,7 @@ import { capitalize } from '../../utilFunctions';
 import ColorButton from '../../Button/Color Button/ColorButton';
 
 interface Props {
+  productID: string;
   productName: string;
   description: string;
   colors: string[];
@@ -20,6 +22,7 @@ type colorInfo = {
 }
 
 export default React.memo(function ProductCard({
+  productID,
   productName, 
   description,
   colors,
@@ -30,6 +33,7 @@ export default React.memo(function ProductCard({
   const [itemIndex, setItemIndex] = useState(0);
   const [colorList, setColorList] = useState<colorInfo[]>([]);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setColorList(colors.map(item => {
@@ -39,6 +43,15 @@ export default React.memo(function ProductCard({
       }
     }))
   }, [colors, setColorList]); 
+
+  function handleSelectProduct(e: React.MouseEvent) {
+    e.preventDefault();
+    
+    const tagName = (e.target as HTMLElement).tagName;
+    if (tagName === 'IMG' || tagName === 'FIGCAPTION') {
+      navigate(`/product-details?productID=${productID}`);
+    }
+  }
 
   function handleChangeColorIndex(color: string) {
     const index = productImages.findIndex((item) => item.color === color);
@@ -50,11 +63,20 @@ export default React.memo(function ProductCard({
   }
 
   return (
-    <figure className='flex flex-col flex-grow md:w-[336px] md:flex-grow-0 xl:w-[280px]'>
-      {!imageLoaded && <div className="self-stretch h-[300px] bg-gray-200 rounded-lg animate-pulse" />}
+    <figure
+      className={clsx(
+        'group flex flex-col flex-grow rounded-lg',
+        'md:w-[336px] md:flex-grow-0 xl:w-[280px]',
+        'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12)] focus:outline-none'
+      )}
+      tabIndex={0}
+      onClick={handleSelectProduct}>
+      {!imageLoaded && (
+        <div className="self-stretch h-[300px] bg-gray-200 rounded-lg animate-pulse" />
+      )}
       <img 
         className={clsx(
-          'self-stretch h-[300px] rounded-lg object-cover',
+          'self-stretch h-[300px] rounded-lg object-cover hover:cursor-pointer',
           imageLoaded ? "opacity-100" : "opacity-0"
         )}
         src={productImages[itemIndex].image_url}
@@ -67,7 +89,11 @@ export default React.memo(function ProductCard({
           <h4 className='font-normal text-xs text-neutral-600'>
             {capitalize(productImages[itemIndex].color)}
           </h4>
-          <figcaption className='font-medium text-lg text-neutral-900'>
+          <figcaption 
+            className={clsx(
+              'font-medium text-lg text-neutral-900',
+              'group-hover:text-indigo-700 hover:cursor-pointer'
+            )}>
             {productName}
           </figcaption>
         </div>
