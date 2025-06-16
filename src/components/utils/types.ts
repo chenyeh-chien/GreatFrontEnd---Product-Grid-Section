@@ -41,6 +41,7 @@ export type EcommerceProductItem = {
   colors: string[];
   images: EcommerceProductImage[];
   inventory: EcommerceProductInventory[];
+  rating: number;
   [key: string]: unknown;
 }
 
