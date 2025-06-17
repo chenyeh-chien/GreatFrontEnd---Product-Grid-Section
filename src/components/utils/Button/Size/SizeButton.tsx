@@ -12,6 +12,7 @@ export default function SizeButton({ text, selected, disabled }: Props) {
       "px-5 py-3 bg-white rounded",
       "font-medium text-base",
       "hover:cursor-pointer hover:bg-neutral-50",
+      "focus:outline-none",
       selected 
       ? "border border-solid border-indigo-600" 
       : "border-neutral-200",

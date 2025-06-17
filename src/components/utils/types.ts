@@ -33,6 +33,11 @@ export type EcommerceProductInventory = {
   stock: number;
 }
 
+export type EcommerceProductInfo = {
+  title: string;
+  description: string[];
+}
+
 export type EcommerceProductItem = {
   product_id: string;
   name: string;
@@ -40,12 +45,13 @@ export type EcommerceProductItem = {
   collection: EcommerceProductCollection;
   colors: string[];
   images: EcommerceProductImage[];
+  info: EcommerceProductInfo[];
   inventory: EcommerceProductInventory[];
   rating: number;
   [key: string]: unknown;
 }
 
-export type EcommerceProductInfo = {
+export type EcommerceProductData = {
   data: EcommerceProductItem[];
 }
 

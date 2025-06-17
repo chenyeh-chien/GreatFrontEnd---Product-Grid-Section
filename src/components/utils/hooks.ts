@@ -3,14 +3,14 @@ import { v4 as uuidv4 } from 'uuid';
 import type { FilterOptions } from "./Filter/Filter Main/filterMain.ts";
 import type { 
   QueryObject,
-  EcommerceProductInfo,
+  EcommerceProductData,
   EcommerceFilterData,
   EcommerceProductItem
 } from "./types";
 import { 
   toQueryParams, 
   toQueryString, 
-  fetchEcommerceProductInfo,
+  fetchEcommerceProductData,
   fetchEcommerceCategories,
   fetchEcommerceCollections,
   fetchEcommerceInventory,
@@ -19,7 +19,7 @@ import {
 
 export function useProductInfo(queryObj?: QueryObject) {
   const [productInfo, setProductInfo] = 
-    useState<EcommerceProductInfo | null>(null);
+    useState<EcommerceProductData | null>(null);
 
   useEffect(() => {
     let isCanceled = false;
@@ -32,7 +32,7 @@ export function useProductInfo(queryObj?: QueryObject) {
           queryStr = toQueryString(toQueryParams(queryObj));
         }
         
-        setProductInfo(await fetchEcommerceProductInfo(queryStr));
+        setProductInfo(await fetchEcommerceProductData(queryStr));
       }
 
       fetchProductInfo();

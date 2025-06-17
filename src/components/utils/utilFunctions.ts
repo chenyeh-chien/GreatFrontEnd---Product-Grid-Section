@@ -1,6 +1,6 @@
 import type { 
   QueryObject,
-  EcommerceProductInfo,
+  EcommerceProductData,
   EcommerceCategories,
   EcommerceCollections,
   EcommerceProductInventory,
@@ -36,8 +36,8 @@ export function toQueryString(params: string[][]) {
   return new URLSearchParams(params).toString();
 }
 
-export function fetchEcommerceProductInfo(queryStr?: string): 
-  Promise<EcommerceProductInfo> {
+export function fetchEcommerceProductData(queryStr?: string): 
+  Promise<EcommerceProductData> {
     return new Promise((resolve, reject) => {
       let url =
         `https://www.greatfrontend.com/api/projects/challenges/e-commerce/products` ;
