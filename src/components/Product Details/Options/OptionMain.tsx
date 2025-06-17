@@ -28,17 +28,19 @@ export default function OptionMain({ options }: Props) {
           )
         })}
       </OptionSection>
-      <OptionSection
-        name='Available Sizes'>
-        {options.sizes.map(item => {
-          return (
-            <SizeButton 
-              text={item.name}
-              selected={item.selected}
-              disabled={false}/>
-          )
-        })}
-      </OptionSection>
+      {options.sizes.length > 0 && (
+        <OptionSection
+          name='Available Sizes'>
+          {options.sizes.map(item => {
+            return (
+              <SizeButton 
+                text={item.name}
+                selected={item.selected}
+                disabled={false}/>
+            )
+          })}
+        </OptionSection>
+      )}
       <OptionSection
         name='Quantity'>
         <QuantityButton 

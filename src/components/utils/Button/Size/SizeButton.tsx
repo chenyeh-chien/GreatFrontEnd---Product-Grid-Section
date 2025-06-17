@@ -9,7 +9,7 @@ interface Props {
 export default function SizeButton({ text, selected, disabled }: Props) {
   return (
     <button className={clsx(
-      "px-5 py-3 bg-white rounded",
+      "w-16 py-3 bg-white rounded",
       "font-medium text-base",
       "hover:cursor-pointer hover:bg-neutral-50",
       "focus:outline-none",
