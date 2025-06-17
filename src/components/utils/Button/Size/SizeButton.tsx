@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 
 interface Props {
-  text: string;
+  text: string | number;
   selected: boolean;
   disabled: boolean;
 }
@@ -20,7 +20,7 @@ export default function SizeButton({ text, selected, disabled }: Props) {
       ? "bg-neutral-100 text-neutral-400" 
       : "border border-solid text-neutral-900",
     )}>
-      {text}
+      {text.toString().toUpperCase()}
     </button>
   )
 }

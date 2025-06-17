@@ -4,7 +4,7 @@ interface OptionInfo {
 }
 
 interface OptionSizeInfo extends OptionInfo {
-  name: string;
+  name: string | number;
 }
 
 interface OptionColorInfo extends OptionInfo {

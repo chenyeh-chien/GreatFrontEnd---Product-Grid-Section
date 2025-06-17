@@ -9,7 +9,7 @@ export default function OptionSection({ name, children }: Props) {
       <h2 className="font-normal text-sm text-neutral-500">
         {name}
       </h2>
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center flex-wrap">
         {children}
       </div>
     </section>

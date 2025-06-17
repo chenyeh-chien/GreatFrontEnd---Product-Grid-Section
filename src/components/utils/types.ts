@@ -48,6 +48,7 @@ export type EcommerceProductItem = {
   info: EcommerceProductInfo[];
   inventory: EcommerceProductInventory[];
   rating: number;
+  sizes: (number | string)[];
   [key: string]: unknown;
 }
 

@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { clsx } from 'clsx';
+import { v4 as uuidv4 } from 'uuid';
 import { useProductDetails } from '../../components/utils/hooks';
 import type { Options } from '../../components/Product Details/Options/Options';
 import ProductDetailImages from '../../components/Product Details/Images/ProductDetailImages';
@@ -20,6 +21,31 @@ export default function ProductDetails() {
   const [imageIndex, setImageIndex] = useState(0);
   const [options, setOptions] = useState<Options | null>(null)
   // TODO: fetch default options from productDetails
+
+  useEffect(() => {
+    if (productDetails !== null) {
+      setOptions({
+        colors: productDetails.colors.map(color => {
+          return {
+            id: uuidv4(),
+            selected: false,
+            color: color
+          }
+        }),
+        sizes: productDetails.sizes.map(size => {
+          return {
+            id: uuidv4(),
+            selected: false,
+            name: size
+          }
+        }),
+        quantity: {
+          total: productDetails.inventory[0].stock,
+          selected: 0
+        }
+      })
+    }
+  }, [productDetails, setOptions])
 
   // TODO: arrange selected option to cart
 
@@ -76,7 +102,10 @@ export default function ProductDetails() {
             <figcaption className='font-normal text-base text-neutral-600'>
               {productDetails.description}
             </figcaption>
-            <OptionMain />
+            {options && (
+              <OptionMain 
+                options={options}/>
+            )}            
             <button className={clsx(
               'grow px-5 py-3 rounded md:px-6 md:py-4',
               'bg-indigo-700 font-medium text-base text-white',

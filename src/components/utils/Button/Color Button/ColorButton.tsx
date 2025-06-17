@@ -1,17 +1,57 @@
+import { useEffect, useReducer } from 'react';
 import { clsx } from 'clsx';
 import { IoIosCheckmark } from "react-icons/io";
 
 interface Props {
     color: string;
     selected: boolean;
+    size?: 'sm' | 'md' | 'lg';
     onChangeColorIndex: (color: string) => void;
 }
 
 export default function ColorButton({ 
   color, 
   selected,
+  size,
   onChangeColorIndex 
 }: Props) {
+  const [colorSize, dispatchColorSize] = 
+    useReducer(handleButtonSize, { width: '16px', height: '16px' })
+
+  useEffect(() => {
+    if (size !== undefined) {
+      dispatchColorSize({ type: size })
+    }
+  }, [dispatchColorSize, size])
+
+  function handleButtonSize(
+    state: { width: string, height: string }, 
+    action: { type: string }
+  ) {
+    switch(action.type) {
+      case 'sm': 
+        return {
+          ...state,
+          width: '16px',
+          height: '16px'
+        }
+      case 'md': 
+        return {
+          ...state,
+          width: '24px',
+          height: '24px'
+        }
+      case 'lg': 
+        return {
+          ...state,
+          width: '38px',
+          height: '38px'
+        }
+      default:
+        throw Error(`Unknown type: ${action.type}`);
+    }
+  }
+
   function handleSelectColor(
     event: React.MouseEvent, 
     color: string
@@ -32,7 +72,8 @@ export default function ColorButton({
       <button 
         className={clsx(
           'flex justify-center items-center',
-          'w-4 h-4 rounded-full border-[0.5px] border-solid border-gray-200',
+          `w-[${colorSize.width}] h-[${colorSize.height}]`,
+          'rounded-full border-[0.5px] border-solid border-gray-200',
           'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12)] focus:outline-none',
           'hover:cursor-pointer hover:shadow-[0_0_0_1px_rgba(68,76,231,0.12)]',
           selected && 'shadow-[0 0 0 1px rgba(68,76,231,1)]'
