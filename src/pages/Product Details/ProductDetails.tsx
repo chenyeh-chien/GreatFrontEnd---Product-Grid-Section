@@ -19,26 +19,41 @@ export default function ProductDetails() {
   }, [search]);
   const productDetails = useProductDetails(productID);
   const [imageIndex, setImageIndex] = useState(0);
-  const [options, setOptions] = useState<Options | null>(null)
+  const [options, setOptions] = useState<Options | null>(null);
   // TODO: fetch default options from productDetails
 
   useEffect(() => {
+    // TODO: set below code to a hook
+    // TODO: 根據color and size 決定目前是哪一個inventory
     if (productDetails !== null) {
+      // TODO: set default value
+      const colors = productDetails.colors.map(color => {
+        return {
+          id: uuidv4(),
+          selected: false,
+          color: color
+        }
+      })
+
+      if (colors.length > 0) {
+        colors[0].selected = true;
+      }
+
+      const sizes = productDetails.sizes.map(size => {
+        return {
+          id: uuidv4(),
+          selected: false,
+          name: size
+        }
+      });
+
+      if (sizes.length > 0) {
+        sizes[0].selected = true;
+      }
+
       setOptions({
-        colors: productDetails.colors.map(color => {
-          return {
-            id: uuidv4(),
-            selected: false,
-            color: color
-          }
-        }),
-        sizes: productDetails.sizes.map(size => {
-          return {
-            id: uuidv4(),
-            selected: false,
-            name: size
-          }
-        }),
+        colors: colors,
+        sizes: sizes,
         quantity: {
           total: productDetails.inventory[0].stock,
           selected: 0
@@ -47,7 +62,10 @@ export default function ProductDetails() {
     }
   }, [productDetails, setOptions])
 
-  // TODO: arrange selected option to cart
+  function handleAddToCart() {
+    // TODO: arrange selected option to cart
+    // Add to state management. ex: zustand
+  }
 
   return (
     <>
@@ -104,14 +122,18 @@ export default function ProductDetails() {
             </figcaption>
             {options && (
               <OptionMain 
-                options={options}/>
+                options={options}
+                onChange={setOptions}/>
             )}            
-            <button className={clsx(
-              'grow px-5 py-3 rounded md:px-6 md:py-4',
-              'bg-indigo-700 font-medium text-base text-white',
-              'hover:cursor-pointer hover:bg-indigo-800',
-              'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12)] focus:outline-none'
-            )}>
+            <button 
+              className={clsx(
+                'grow px-5 py-3 rounded md:px-6 md:py-4',
+                'bg-indigo-700 font-medium text-base text-white',
+                'hover:cursor-pointer hover:bg-indigo-800',
+                'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12)] focus:outline-none'
+              )}
+              onClick={handleAddToCart}
+              disabled={false}>
               Add to Cart
             </button>
           </div>

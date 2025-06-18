@@ -2,6 +2,7 @@ import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { clsx } from 'clsx';
 
+
 interface Props {
   quantity: number;
   incrementDisabled?: boolean;
@@ -15,6 +16,22 @@ export default function QuantityButton({
   decrementDisabled,
   onChange
 }: Props) {
+  function handleIncrement() {
+    if (incrementDisabled) {
+      return;
+    }
+
+    onChange(quantity + 1);
+  }
+
+  function handleDecrement() {
+    if (decrementDisabled) {
+      return;
+    }
+
+    onChange(quantity - 1);
+  }
+
   return (
     <button className={clsx(
       'flex justify-center items-center gap-3 p-0.5',
@@ -24,9 +41,9 @@ export default function QuantityButton({
         className={clsx(
           "flex justify-center items-center w-5 h-5",
           "hover:cursor-pointer",
-          incrementDisabled ? "text-neutral-400" : "text-neutral-600"
+          decrementDisabled ? "text-neutral-400" : "text-neutral-600"
         )}
-        onClick={() => onChange(quantity - 1)}>
+        onClick={handleDecrement}>
         <FaMinus />
       </span>
       <span className="w-[49px] px-3 py-1.5">
@@ -36,9 +53,9 @@ export default function QuantityButton({
         className={clsx(
           "flex justify-center items-center w-5 h-5",
           "hover:cursor-pointer",
-          decrementDisabled ? "text-neutral-400" : "text-neutral-600"
+          incrementDisabled ? "text-neutral-400" : "text-neutral-600"
         )}
-        onClick={() => onChange(quantity + 1)}>
+        onClick={handleIncrement}>
         <FaPlus />
       </span>
     </button>

@@ -6,11 +6,50 @@ import QuantityButton from "../../utils/Button/Quantity/QuantityButton";
 
 interface Props {
   options: Options;
+  onChange: (options: Options) => void;
 }
 
-export default function OptionMain({ options }: Props) {
+export default function OptionMain({ options, onChange }: Props) {
   function handleChangeColorIndex(color: string) {
-    console.log(color)
+    const colors = structuredClone(options.colors);
+    const index = colors.findIndex((item) => item.color === color);
+    if (index === -1) {
+      return;
+    }
+    
+    colors.forEach(item => item.selected = false);
+    colors[index].selected = !colors[index].selected;
+
+    onChange({
+      ...options,
+      colors
+    })
+  }
+
+  function handleSelectSize(size: string | number) {
+    const sizes = structuredClone(options.sizes);
+    const index = sizes.findIndex((item) => item.name === size);
+    if (index === -1) {
+      return;
+    }
+
+    sizes.forEach(item => item.selected = false);
+    sizes[index].selected = !sizes[index].selected;
+
+    onChange({
+      ...options,
+      sizes
+    })
+  }
+
+  function handleChangeQuantity(selected: number) {
+    const quantity = structuredClone(options.quantity);
+    quantity.selected = selected;
+
+    onChange({
+      ...options,
+      quantity
+    })
   }
 
   return (
@@ -24,7 +63,7 @@ export default function OptionMain({ options }: Props) {
               color={item.color}
               selected={item.selected}
               size='lg'
-              onChangeColorIndex={(color: string) => handleChangeColorIndex(color)}/>
+              onChangeColorIndex={handleChangeColorIndex}/>
           )
         })}
       </OptionSection>
@@ -34,9 +73,11 @@ export default function OptionMain({ options }: Props) {
           {options.sizes.map(item => {
             return (
               <SizeButton 
+                key={item.id}
                 text={item.name}
                 selected={item.selected}
-                disabled={false}/>
+                disabled={false}
+                onSelect={handleSelectSize}/>
             )
           })}
         </OptionSection>
@@ -45,7 +86,9 @@ export default function OptionMain({ options }: Props) {
         name='Quantity'>
         <QuantityButton 
           quantity={options.quantity.selected}
-          onChange={(quantity) => console.log(quantity)}/>
+          incrementDisabled={options.quantity.selected >= options.quantity.total}
+          decrementDisabled={options.quantity.selected <= 0}
+          onChange={handleChangeQuantity}/>
       </OptionSection>
     </section>
   )

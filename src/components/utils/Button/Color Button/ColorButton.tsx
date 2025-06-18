@@ -16,7 +16,11 @@ export default function ColorButton({
   onChangeColorIndex 
 }: Props) {
   const [colorSize, dispatchColorSize] = 
-    useReducer(handleButtonSize, { width: '16px', height: '16px' })
+    useReducer(handleButtonSize, { 
+      width: '16px', 
+      height: '16px',
+      icon: 'text-base'
+    })
 
   useEffect(() => {
     if (size !== undefined) {
@@ -25,7 +29,7 @@ export default function ColorButton({
   }, [dispatchColorSize, size])
 
   function handleButtonSize(
-    state: { width: string, height: string }, 
+    state: { width: string, height: string, icon: string }, 
     action: { type: string }
   ) {
     switch(action.type) {
@@ -33,19 +37,22 @@ export default function ColorButton({
         return {
           ...state,
           width: '16px',
-          height: '16px'
+          height: '16px',
+          icon: 'text-base'
         }
       case 'md': 
         return {
           ...state,
           width: '24px',
-          height: '24px'
+          height: '24px',
+          icon: 'text-xl'
         }
       case 'lg': 
         return {
           ...state,
           width: '38px',
-          height: '38px'
+          height: '38px',
+          icon: 'text-4xl'
         }
       default:
         throw Error(`Unknown type: ${action.type}`);
@@ -83,7 +90,7 @@ export default function ColorButton({
         {selected && (
           <IoIosCheckmark 
             className={clsx(
-              'text-base text-center',
+              `${colorSize.icon} text-center`,
               getCheckIconColor(color) === 'white' 
               ? 'text-white'
               : 'text-neutral-500'
