@@ -27,7 +27,8 @@ export type EcommerceProductImage = {
 
 export type EcommerceProductInventory = {
   product_id: string;
-  color: string;
+  color: string | null;
+  size: string | number | null;
   list_price: number;
   sale_price: number;
   stock: number;

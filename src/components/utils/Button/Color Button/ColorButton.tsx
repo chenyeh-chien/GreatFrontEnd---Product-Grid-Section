@@ -87,16 +87,14 @@ export default function ColorButton({
         )}
         style={{backgroundColor: color}}
         onClick={(e) => handleSelectColor(e, color)}>
-        {selected && (
-          <IoIosCheckmark 
-            className={clsx(
-              `${colorSize.icon} text-center`,
-              getCheckIconColor(color) === 'white' 
-              ? 'text-white'
-              : 'text-neutral-500'
-            )}/>
-          )
-        }
+        <IoIosCheckmark 
+          className={clsx(
+            `${colorSize.icon} invisible text-center`,
+            getCheckIconColor(color) === 'white' 
+            ? 'text-white'
+            : 'text-neutral-500',
+            selected && 'visible'
+          )}/>
       </button>
     </div>
   )

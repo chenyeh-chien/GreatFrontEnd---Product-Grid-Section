@@ -20,13 +20,13 @@ export default function ProductDetails() {
   const productDetails = useProductDetails(productID);
   const [imageIndex, setImageIndex] = useState(0);
   const [options, setOptions] = useState<Options | null>(null);
+  const [inventoryIndex, setInventoryIndex] = useState(0);
   // TODO: fetch default options from productDetails
 
   useEffect(() => {
     // TODO: set below code to a hook
     // TODO: 根據color and size 決定目前是哪一個inventory
     if (productDetails !== null) {
-      // TODO: set default value
       const colors = productDetails.colors.map(color => {
         return {
           id: uuidv4(),
@@ -55,12 +55,58 @@ export default function ProductDetails() {
         colors: colors,
         sizes: sizes,
         quantity: {
-          total: productDetails.inventory[0].stock,
+          total: productDetails.inventory[inventoryIndex].stock,
           selected: 0
         }
       })
     }
   }, [productDetails, setOptions])
+
+  function getInventoryIndex(
+    color: string | null, 
+    size: string | number | null
+  ) {
+    if (productDetails === null) {
+      return;
+    }
+
+    const index = 
+      productDetails.inventory.findIndex(
+        item => item.color === color && item.size === size
+      );
+      
+    return index;
+  }
+
+  function handleChangeOptions(options: Options) {
+    if (productDetails === null) {
+      return;
+    }
+
+    const selectedColors = options.colors.filter(item => item.selected);
+    const selectedSizes = options.sizes.filter(item => item.selected);
+    const color = selectedColors.length > 0 ? selectedColors[0].color : null;
+    const size = selectedSizes.length > 0 ? selectedSizes[0].name : null;
+
+    const index = 
+      productDetails.inventory.findIndex(
+        item => item.color === color && item.size === size
+      );
+    
+    if (index === -1) {
+      return;
+    }
+
+    if (index !== inventoryIndex) {
+      options.quantity = {
+        total: productDetails.inventory[inventoryIndex].stock,
+        selected: 0,
+      }
+    }
+
+    setOptions(options);
+    setInventoryIndex(index);
+  }
 
   function handleAddToCart() {
     // TODO: arrange selected option to cart
@@ -84,11 +130,11 @@ export default function ProductDetails() {
                 <div className='flex flex-col gap-2 justify-center self-stretch'>
                   <div className='flex gap-2 items-end'>
                     <span className='font-medium text-3xl text-neutral-600'>
-                      ${productDetails.inventory[0].sale_price}
+                      ${productDetails.inventory[inventoryIndex].sale_price}
                     </span>
-                    {productDetails.inventory[0].sale_price !== productDetails.inventory[0].list_price && 
+                    {productDetails.inventory[inventoryIndex].sale_price !== productDetails.inventory[inventoryIndex].list_price && 
                       <span className='font-medium text-lg line-through text-neutral-400'>
-                        ${productDetails.inventory[0].list_price}
+                        ${productDetails.inventory[inventoryIndex].list_price}
                       </span>
                     }
                   </div>
@@ -123,7 +169,7 @@ export default function ProductDetails() {
             {options && (
               <OptionMain 
                 options={options}
-                onChange={setOptions}/>
+                onChange={handleChangeOptions}/>
             )}            
             <button 
               className={clsx(
