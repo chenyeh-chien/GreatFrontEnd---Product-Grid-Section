@@ -8,7 +8,7 @@ interface FilterCheckboxInfo extends FilterInfo {
 }
 
 interface FilterColorInfo extends FilterInfo {
-  color: string;
+  color: string | null;
 }
 
 interface FilterRatingInfo extends FilterInfo {

@@ -124,3 +124,12 @@ export function capitalize(str: string) {
 
   return str[0].toUpperCase() + str.slice(1).toLowerCase();
 }
+
+export function getDateStr(date?: Date) {
+  const currDate = date ?? new Date();
+  const year = currDate.getFullYear();
+  const month = String(currDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currDate.getDate()).padStart(2, "0");;
+
+  return `${year}-${month}-${day}`;
+}

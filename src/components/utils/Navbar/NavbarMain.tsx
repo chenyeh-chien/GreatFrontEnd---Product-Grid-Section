@@ -1,10 +1,10 @@
 import { NavLink } from "react-router";
-import { RiShoppingBag3Line } from "react-icons/ri";
 import { BsList } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 import { clsx } from "clsx";
 import type { NavbarLink } from "../types";
 import { useOverflowHidden } from "../hooks";
+import ShoppingCart from "./Shopping Cart/ShoppinfCart";
 import appIcon from '../../../assets/stylenest.svg';
 
 const links: NavbarLink[] = [{
@@ -58,11 +58,7 @@ export default function NavbarMain() {
               </button>
             : (
               <>
-                <button>
-                  <RiShoppingBag3Line 
-                    className="w-6 h-6 hover:cursor-pointer"
-                    aria-label="View shopping cart"/>
-                </button>
+                <ShoppingCart />
                 <button onClick={() => setShowLinks(true)}>
                   <BsList 
                     className="w-6 h-6 hover:cursor-pointer xl:hidden"

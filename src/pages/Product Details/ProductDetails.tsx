@@ -1,9 +1,12 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { clsx } from 'clsx';
 import { v4 as uuidv4 } from 'uuid';
+import { useCartStore } from '../../stores/useCartStore';
 import { useProductDetails } from '../../components/utils/hooks';
+import { getDateStr } from '../../components/utils/utilFunctions';
 import type { Options } from '../../components/Product Details/Options/Options';
+import type { EcommerceCartItem } from '../../components/utils/types';
 import ProductDetailImages from '../../components/Product Details/Images/ProductDetailImages';
 import DiscountBadge from '../../components/utils/Badge/Discount/DiscountBadge';
 import RatingButton from '../../components/utils/Button/Rating/RatingButton';
@@ -20,13 +23,44 @@ export default function ProductDetails() {
   const productDetails = useProductDetails(productID);
   const [imageIndex, setImageIndex] = useState(0);
   const [options, setOptions] = useState<Options | null>(null);
-  const [inventoryIndex, setInventoryIndex] = useState(0);
-  // TODO: fetch default options from productDetails
+  const [inventoryIndex, setInventoryIndex] = useState(-1);
+  const cartItems = useCartStore((state) => state.cartItems);
+  const addCartItem = useCartStore((state) => state.addCartItem);
+
+  const handleChangeOptions = useCallback((options: Options) => {
+    if (productDetails === null) {
+      return;
+    }
+
+    const selectedColors = options.colors.filter(item => item.selected);
+    const selectedSizes = options.sizes.filter(item => item.selected);
+    const color = selectedColors.length > 0 ? selectedColors[0].color : null;
+    const size = selectedSizes.length > 0 ? selectedSizes[0].name : null;
+
+    const index = 
+      productDetails.inventory.findIndex(
+        item => item.color === color && item.size === size
+      );
+    
+    if (index === -1) {
+      return;
+    }
+
+    if (index !== inventoryIndex) {
+      setInventoryIndex(index);
+    }
+
+    setOptions({
+      ...options,
+      quantity: {
+        total: productDetails.inventory[index].stock,
+        selected: index !== inventoryIndex ? 0 : options.quantity.selected,
+      }
+    });
+  }, [productDetails, inventoryIndex, setInventoryIndex, setOptions])
 
   useEffect(() => {
-    // TODO: set below code to a hook
-    // TODO: 根據color and size 決定目前是哪一個inventory
-    if (productDetails !== null) {
+    if (productDetails !== null && options === null) {
       const colors = productDetails.colors.map(color => {
         return {
           id: uuidv4(),
@@ -51,66 +85,60 @@ export default function ProductDetails() {
         sizes[0].selected = true;
       }
 
-      setOptions({
+      handleChangeOptions({
         colors: colors,
         sizes: sizes,
         quantity: {
-          total: productDetails.inventory[inventoryIndex].stock,
+          total: 0,
           selected: 0
         }
       })
     }
-  }, [productDetails, setOptions])
-
-  function getInventoryIndex(
-    color: string | null, 
-    size: string | number | null
-  ) {
-    if (productDetails === null) {
-      return;
-    }
-
-    const index = 
-      productDetails.inventory.findIndex(
-        item => item.color === color && item.size === size
-      );
-      
-    return index;
-  }
-
-  function handleChangeOptions(options: Options) {
-    if (productDetails === null) {
-      return;
-    }
-
-    const selectedColors = options.colors.filter(item => item.selected);
-    const selectedSizes = options.sizes.filter(item => item.selected);
-    const color = selectedColors.length > 0 ? selectedColors[0].color : null;
-    const size = selectedSizes.length > 0 ? selectedSizes[0].name : null;
-
-    const index = 
-      productDetails.inventory.findIndex(
-        item => item.color === color && item.size === size
-      );
-    
-    if (index === -1) {
-      return;
-    }
-
-    if (index !== inventoryIndex) {
-      options.quantity = {
-        total: productDetails.inventory[inventoryIndex].stock,
-        selected: 0,
-      }
-    }
-
-    setOptions(options);
-    setInventoryIndex(index);
-  }
+  }, [productDetails, options, setOptions, handleChangeOptions])
 
   function handleAddToCart() {
+    if (
+      productDetails === null ||
+      options === null ||
+      inventoryIndex === -1) {
+      return;
+    }
+
+    console.log(cartItems);
+
+    const listPrice = productDetails.inventory[inventoryIndex].list_price;
+    const salePrice = productDetails.inventory[inventoryIndex].sale_price;
+    const quantity = options.quantity.selected;
+
+    const imageURL = 
+      productDetails.images.filter(
+        item => item.color === productDetails.inventory[inventoryIndex].color
+      );
+
     // TODO: arrange selected option to cart
+    const cartItem: EcommerceCartItem = {
+      product: {
+        product_id: productDetails.product_id,
+        name: productDetails.name,
+        description: productDetails.description
+      },
+      unit: {
+        sku: productDetails.inventory[inventoryIndex].sku,
+        list_price: listPrice,
+        sale_price: salePrice,
+        size: productDetails.inventory[inventoryIndex].size,
+        color: productDetails.inventory[inventoryIndex].color,
+        stock: productDetails.inventory[inventoryIndex].stock,
+        image_url: imageURL.length > 0 ? imageURL[0].image_url : ""
+      },
+      total_list_price: listPrice * quantity,
+      total_sale_price: salePrice * quantity,
+      quantity,
+      created_at: getDateStr(),
+    }
+
     // Add to state management. ex: zustand
+    addCartItem(cartItem);
   }
 
   return (
@@ -122,22 +150,24 @@ export default function ProductDetails() {
           images={productDetails.images}
           selectedIndex={imageIndex}
           onSelect={(index) => setImageIndex(index)}/>
-        <div className='flex flex-col gap-10 self-stretch'>
+        <div className='flex flex-col flex-1 gap-10 self-stretch'>
           <div className='flex flex-col gap-8 self-stretch'>
             <div className='flex flex-col gap-5'>
               <h2 className='font-semibold text-3xl text-neutral-900'>{productDetails.name}</h2>
               <div className='flex flex-col gap-3 self-stretch'>
                 <div className='flex flex-col gap-2 justify-center self-stretch'>
-                  <div className='flex gap-2 items-end'>
-                    <span className='font-medium text-3xl text-neutral-600'>
-                      ${productDetails.inventory[inventoryIndex].sale_price}
-                    </span>
-                    {productDetails.inventory[inventoryIndex].sale_price !== productDetails.inventory[inventoryIndex].list_price && 
-                      <span className='font-medium text-lg line-through text-neutral-400'>
-                        ${productDetails.inventory[inventoryIndex].list_price}
+                  {inventoryIndex >= 0 && (
+                    <div className='flex gap-2 items-end'>
+                      <span className='font-medium text-3xl text-neutral-600'>
+                        ${productDetails.inventory[inventoryIndex].sale_price}
                       </span>
-                    }
-                  </div>
+                      {productDetails.inventory[inventoryIndex].sale_price !== productDetails.inventory[inventoryIndex].list_price && 
+                        <span className='font-medium text-lg line-through text-neutral-400'>
+                          ${productDetails.inventory[inventoryIndex].list_price}
+                        </span>
+                      }
+                    </div>
+                  )}
                   <div className='flex gap-2'>
                     <DiscountBadge 
                       display='percentage'

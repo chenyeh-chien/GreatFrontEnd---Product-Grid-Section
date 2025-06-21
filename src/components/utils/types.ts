@@ -27,6 +27,7 @@ export type EcommerceProductImage = {
 
 export type EcommerceProductInventory = {
   product_id: string;
+  sku: string;
   color: string | null;
   size: string | number | null;
   list_price: number;
@@ -85,4 +86,29 @@ export type EcommerceProductQueryParameters = {
   category: string[];
   colors: string[];
   rating: number[];
+}
+
+type EcommerceCartProduct = {
+  product_id: string;
+  name: string;
+  description: string;
+}
+
+type EcommerceCartUnit = {
+  sku: string;
+  list_price: number;
+  sale_price: number;
+  size: string | number | null;
+  color: string | null;
+  stock: number;
+  image_url: string;
+}
+
+export type EcommerceCartItem = {
+  product: EcommerceCartProduct;
+  unit: EcommerceCartUnit;
+  total_list_price: number;
+  total_sale_price: number;
+  quantity: number;
+  created_at: string;
 }
