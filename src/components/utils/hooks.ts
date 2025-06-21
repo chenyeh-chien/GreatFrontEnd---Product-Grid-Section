@@ -138,6 +138,7 @@ export function useFilterOptions(): [FilterOptions | null, (options: FilterOptio
         });
         const colors = 
           Array.from(new Set(filterData.inventory.map(item => item.color)))
+            .filter(color => color !== null)
             .map(color => {
               return {
                 id: uuidv4(),
