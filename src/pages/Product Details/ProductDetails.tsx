@@ -157,25 +157,33 @@ export default function ProductDetails() {
               <div className='flex flex-col gap-3 self-stretch'>
                 <div className='flex flex-col gap-2 justify-center self-stretch'>
                   {inventoryIndex >= 0 && (
-                    <div className='flex gap-2 items-end'>
-                      <span className='font-medium text-3xl text-neutral-600'>
-                        ${productDetails.inventory[inventoryIndex].sale_price}
-                      </span>
-                      {productDetails.inventory[inventoryIndex].sale_price !== productDetails.inventory[inventoryIndex].list_price && 
-                        <span className='font-medium text-lg line-through text-neutral-400'>
-                          ${productDetails.inventory[inventoryIndex].list_price}
+                    <>
+                      <div className='flex gap-2 items-end'>
+                        <span className='font-medium text-3xl text-neutral-600'>
+                          ${productDetails.inventory[inventoryIndex].sale_price}
                         </span>
-                      }
-                    </div>
+                        {productDetails.inventory[inventoryIndex].sale_price !== productDetails.inventory[inventoryIndex].list_price && 
+                          <span className='font-medium text-lg line-through text-neutral-400'>
+                            ${productDetails.inventory[inventoryIndex].list_price}
+                          </span>
+                        }
+                      </div>
+                      <div className='flex gap-2'>
+                        <>
+                          {productDetails.inventory[inventoryIndex].discount !== null && (
+                            <DiscountBadge 
+                            display='currency'
+                            currency={productDetails.inventory[inventoryIndex].discount}/>
+                          )}
+                          {productDetails.inventory[inventoryIndex].discount_percentage !== null && (
+                            <DiscountBadge 
+                              display='percentage'
+                              percentage={productDetails.inventory[inventoryIndex].discount_percentage}/>
+                          )}
+                        </>
+                      </div>
+                    </>
                   )}
-                  <div className='flex gap-2'>
-                    <DiscountBadge 
-                      display='percentage'
-                      percentage={20}/>
-                    <DiscountBadge 
-                      display='currency'
-                      currency={5}/>
-                  </div>
                 </div>
                 <div className='flex gap-2 items-center'>
                   <span className='font-normal text-xl text-neutral-900'>

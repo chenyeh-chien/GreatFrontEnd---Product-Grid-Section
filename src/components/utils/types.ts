@@ -32,6 +32,8 @@ export type EcommerceProductInventory = {
   size: string | number | null;
   list_price: number;
   sale_price: number;
+  discount: number | null;
+  discount_percentage: number | null;
   stock: number;
 }
 
