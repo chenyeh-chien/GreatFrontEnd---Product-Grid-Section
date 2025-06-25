@@ -21,16 +21,11 @@ export default function ProductDetailImages({
     <div className={clsx(
       'flex flex-col gap-6 self-stretch flex-1 xl:w-[592px]'
     )}>
-      {!imageLoaded && (
-        <div className={clsx(
-          'self-stretch h-[400px] bg-gray-200 rounded-lg animate-pulse',
-          'md:h-[800px]'
-        )}/>
-      )}
       <img 
         className={clsx(
           'h-[400px] object-cover rounded-lg',
-          'md:h-[800px]'
+          'md:h-[800px]',
+          !imageLoaded && 'bg-gray-200 animate-pulse' 
         )}
         src={images[selectedIndex].image_url}
         loading="lazy"
