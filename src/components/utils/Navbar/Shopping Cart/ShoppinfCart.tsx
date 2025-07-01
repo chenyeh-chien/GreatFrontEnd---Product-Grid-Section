@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import { RiShoppingBag3Line } from "react-icons/ri";
 import { clsx } from 'clsx';
 import { useCartStore } from '../../../../stores/useCartStore';
@@ -6,11 +7,12 @@ export default function ShoppingCart() {
   const cartItems = useCartStore((state) => state.cartItems);
 
   return (
-    <button 
+    <NavLink 
       className={clsx(
         'relative rounded',
         'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12)] focus:outline-none'
-      )}>
+      )}
+      to="/shopping-cart">
       <RiShoppingBag3Line 
         className="w-6 h-6 hover:cursor-pointer"
         aria-label="View shopping cart"/>
@@ -23,6 +25,6 @@ export default function ShoppingCart() {
           {cartItems.items.length}
         </div>
       )}
-    </button>
+    </NavLink>
   )
 }
