@@ -71,13 +71,10 @@ export default React.memo(function ProductCard({
       )}
       tabIndex={0}
       onClick={handleSelectProduct}>
-      {!imageLoaded && (
-        <div className="self-stretch h-[300px] bg-gray-200 rounded-lg animate-pulse" />
-      )}
       <img 
         className={clsx(
           'self-stretch h-[300px] rounded-lg object-cover hover:cursor-pointer',
-          imageLoaded ? "opacity-100" : "opacity-0"
+          !imageLoaded && 'bg-gray-200 animate-pulse' 
         )}
         src={productImages[itemIndex].image_url}
         alt={description}
