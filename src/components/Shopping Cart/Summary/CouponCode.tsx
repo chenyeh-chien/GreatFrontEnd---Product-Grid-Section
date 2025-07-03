@@ -11,18 +11,28 @@ export default function CouponCode() {
 
   return (
     <section>
-      <div className={clsx(
-        'flex justify-end items-end gap-2 self-stretch',
-      )}>
-        {showCouponCode ? (
-          <form className='flex gap-2 justify-end items-end'>
+      {showCouponCode ? (
+        <div className={clsx(
+          'flex flex-col justify-end gap-2 self-stretch py-1',
+        )}>
+          <form className='flex gap-2 justify-end items-end self-stretch'>
             <div className='flex flex-col gap-1.5 grow'>
-              <label className='font-medium text-sm text-neutral-700'>Coupon code</label>
+              <label 
+                className='font-medium text-sm text-neutral-700'
+                htmlFor='coupon-input'>
+                Coupon code
+              </label>
               <input 
+                id="coupon-input"
                 className={clsx(
                   'px-3.5 py-2.5 rounded bg-neutral-50 grow',
                   'border border-solid border-neutral-200',
-                  'font-normal text-sm text-neutral-500'
+                  'font-normal text-sm text-neutral-900',
+                  'placeholder:text-neutral-500',
+                  'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12),' + 
+                  '0_1px_2px_0_rgba(16,24,40,0.05),' + 
+                  '0_0_0_1px_rgba(68,76,231,1)]',
+                  'focus:outline-indigo-700 focus:outline'
                 )}
                 type="text" 
                 placeholder='Enter coupon code'/>
@@ -30,13 +40,18 @@ export default function CouponCode() {
             <button 
               className={clsx(
                 "w-20 px-3.5 py-2.5 font-medium text-sm text-neutral-900",
-                "rounded border-[0.5px] border-solid border-neutral-200"
+                "rounded border-[0.5px] border-solid border-neutral-200",
+                'hover:cursor-pointer'
               )}
               onClick={handleApplyCoupon}>
               Apply
             </button>
           </form>
-        ) : (
+        </div>
+      ) : (
+        <div className={clsx(
+          'flex justify-end items-end gap-2 self-stretch',
+        )}>
           <button className={clsx(
             'flex justify-center items-center gap-1.5 text-indigo-700 rounded',
             'hover:cursor-pointer focus:bg-white',
@@ -53,8 +68,8 @@ export default function CouponCode() {
               Add coupon code
             </span>
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   )
 }

@@ -19,26 +19,32 @@ export default function ShoppingCart() {
   return (
     <main className={clsx(
       'flex flex-col gap-16 self-stretch rounded-lg px-3 py-12',
-
+      'md:px-4 md:py-16',
+      'xl:p-24'
     )}>
       <h1 className='font-semibold text-3xl text-neutral-900'>
         Shopping Cart
       </h1>
-      <section className="flex flex-col gap-8 self-stretch">
-      {cartItems !== null && cartItems.items.map((item, index) => {
-        return (
-          <>
-            <CartCard 
-              item={item}/>
-            {index !== cartItems.items.length - 1 && (
-              <hr className="border-t border-dashed border-gray-300"/>
-            )}
-          </>
-        )
-      })}
+      <section className={clsx(
+        'flex flex-col gap-16',
+        'xl:flex-row xl:gap-8'
+      )}>
+        <section className='flex flex-col gap-8 self-stretch'>
+        {cartItems !== null && cartItems.items.map((item, index) => {
+          return (
+            <>
+              <CartCard 
+                item={item}/>
+              {index !== cartItems.items.length - 1 && (
+                <hr className="border-t border-dashed border-gray-300"/>
+              )}
+            </>
+          )
+        })}
+        </section>
+        <OrderSummary 
+          subtotal={subtotal}/>
       </section>
-      <OrderSummary 
-        subtotal={subtotal}/>
     </main>
   )
 }

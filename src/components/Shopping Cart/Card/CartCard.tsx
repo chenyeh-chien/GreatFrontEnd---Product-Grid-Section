@@ -23,10 +23,14 @@ export default function CartCard({ item }: Props) {
 
   return (
     <figure className={clsx(
-      'flex flex-col gap-4 self-stretch'
+      'flex flex-col gap-4 self-stretch',
+      'md:flex-row md:gap-8'
     )}>
       <img 
-        className='h-[200px] object-cover rounded-lg'
+        className={clsx(
+          'h-[200px] object-cover rounded-lg',
+          'md:min-w-[280px]'
+        )}
         src={item.unit.image_url}/>
       <div className="flex flex-col gap-4 self-stretch">
         <h2 className='font-medium text-2xl text-neutral-900'>

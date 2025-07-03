@@ -16,7 +16,8 @@ export default function OrderSummary({ subtotal }: Props) {
   return (
     <section className={clsx(
       'flex flex-col gap-8',
-      'bg-white p-4 rounded-lg border border-solid border-neutral-200'
+      'bg-white p-4 rounded-lg border border-solid border-neutral-200',
+      'xl:w-96 xl:h-max'
     )}>
       <h2 className='font-semibold text-2xl text-neutral-900'>
         Order Summary
