@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
-import { clsx } from 'clsx';
 import { v4 as uuidv4 } from 'uuid';
 import { useCartStore } from '../../stores/useCartStore';
 import { useProductDetails } from '../../components/utils/hooks';
@@ -12,6 +11,7 @@ import DiscountBadge from '../../components/utils/Badge/Discount/DiscountBadge';
 import RatingButton from '../../components/utils/Button/Rating/RatingButton';
 import StyledLink from '../../components/utils/Link/StyledLink';
 import OptionMain from '../../components/Product Details/Options/OptionMain';
+import ConfirmButton from '../../components/utils/Button/Confirm/ConfirmButton';
 import InfoMain from '../../components/Product Details/Infos/InfoMain';
 
 export default function ProductDetails() {
@@ -208,18 +208,10 @@ export default function ProductDetails() {
               <OptionMain 
                 options={options}
                 onChange={handleChangeOptions}/>
-            )}            
-            <button 
-              className={clsx(
-                'grow px-5 py-3 rounded md:px-6 md:py-4',
-                'bg-indigo-700 font-medium text-base text-white',
-                'hover:cursor-pointer hover:bg-indigo-800',
-                'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12)] focus:outline-none'
-              )}
-              onClick={handleAddToCart}
-              disabled={false}>
-              Add to Cart
-            </button>
+            )}
+            <ConfirmButton 
+              text='Add to Cart'
+              onClick={handleAddToCart} />
           </div>
           <InfoMain 
             infos={productDetails.info}/>
