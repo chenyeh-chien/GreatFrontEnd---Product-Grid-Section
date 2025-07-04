@@ -48,6 +48,23 @@ export const useCartStore = create<CartState>()(
           })
         }
       }
+
+      const calculateTotal = () => {
+        if (get().cartItems === null) {
+          return;
+        }
+
+        // TODO: check the working procedure
+        set((state) => {
+          return state.cartItems!.items.reduce(
+            (accum, curr) => accum + curr.total_sale_price, 0
+          )
+        })
+
+        return get().cartItems.items.reduce(
+          (accum, curr) => accum + curr.total_sale_price, 0
+        );
+      }
       
       return {
         cartItems: null,
@@ -69,8 +86,11 @@ export const useCartStore = create<CartState>()(
               
             }
 
+            console.log(calculateTotal(state.cartItems!))
+            items!.summary.subtotal = calculateTotal(state.cartItems!);
+
             return {
-              cartItems: items
+              cartItems: items,
             } 
           })
         },

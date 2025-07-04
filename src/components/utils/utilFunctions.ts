@@ -4,7 +4,8 @@ import type {
   EcommerceCategories,
   EcommerceCollections,
   EcommerceProductInventory,
-  EcommerceProductItem
+  EcommerceProductItem,
+  CouponResponse
 } from "./types";
 import inventory from "../../assets/files/inventory.json";
 
@@ -93,6 +94,27 @@ export function fetchEcommerceProductByID(id: string):
         `https://www.greatfrontend.com/api/projects/challenges/e-commerce/products/${id}`;
 
       fetch(url)
+        .then(response => response.json())
+        .then(data => resolve(data))
+        .catch(error => reject(error));
+    })
+}
+
+export function applyCouponCode(code: string): 
+  Promise<CouponResponse> {
+    return new Promise((resolve, reject) => {
+      const url =
+        `https://www.greatfrontend.com/api/projects/challenges/e-commerce/coupons/apply`;
+
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          coupon_code: code
+        })
+      })
         .then(response => response.json())
         .then(data => resolve(data))
         .catch(error => reject(error));

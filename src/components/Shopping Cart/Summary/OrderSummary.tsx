@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { clsx } from 'clsx';
+import type { CouponResponse } from '../../utils/types';
 import SummaryInfo from './SummaryInfo';
 import CouponCode from './CouponCode';
 import ConfirmButton from '../../utils/Button/Confirm/ConfirmButton';
@@ -9,6 +11,12 @@ interface Props {
 }
 
 export default function OrderSummary({ subtotal }: Props) {
+  const [coupon, setCoupon] = useState<CouponResponse | null>({
+    coupon_code: "GR8FRNTND24",
+    discount_amount: 5,
+    discount_percentage: null
+  });
+
   function handleCheckout() {
 
   }
@@ -22,15 +30,25 @@ export default function OrderSummary({ subtotal }: Props) {
       <h2 className='font-semibold text-2xl text-neutral-900'>
         Order Summary
       </h2>
-      <div>
+      <div className='flex flex-col gap-4'>
         <SummaryInfo 
+          category='text'
           label='Subtotal'
           text={`$${subtotal}`}/>
         <SummaryInfo 
+          category='text'
           label='Shipping'
           text='Free'/>
+        {coupon !== null && (
+          <SummaryInfo 
+            category='tag'
+            label={coupon.coupon_code}
+            text='Free'/>
+        )}
         <div>
-          <CouponCode />
+          <CouponCode 
+            code={coupon.coupon_code}
+            onChangeCoupon={setCoupon}/>
         </div>
       </div>
       <hr className="border-t border-dashed border-gray-300"/>

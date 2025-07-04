@@ -114,3 +114,9 @@ export type EcommerceCartItem = {
   quantity: number;
   created_at: string;
 }
+
+export type CouponResponse = {
+  coupon_code: string;
+  discount_amount: number | null;
+  discount_percentage: number | null;
+}

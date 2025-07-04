@@ -1,12 +1,35 @@
 import { useState } from 'react';
 import { RiCouponLine } from "react-icons/ri";
 import { clsx } from 'clsx';
+import type { CouponResponse } from '../../utils/types';
+import { applyCouponCode } from '../../utils/utilFunctions';
+ 
+interface Props {
+  code: string | null;
+  onChangeCoupon: (coupon: CouponResponse | null) => void;
+}
 
-export default function CouponCode() {
+export default function CouponCode({ code, onChangeCoupon }: Props) {
   const [showCouponCode, setShowCouponCode] = useState(false);
+  const [couponCode, setCouponCode] = useState<string | null>("");
 
-  function handleApplyCoupon(e: React.MouseEvent) {
+  function handleChangeCouponCode(e: React.ChangeEvent) {
     e.preventDefault();
+    
+    const value = (e.target as HTMLInputElement).value;
+    setCouponCode(value);
+  }
+
+  async function handleApplyCoupon(e: React.MouseEvent) {
+    e.preventDefault();
+
+    if (couponCode === null) {
+      return;
+    }
+
+    // applyCouponCode
+    const result = await applyCouponCode(couponCode);
+    onChangeCoupon(result);
   }
 
   return (
@@ -35,7 +58,8 @@ export default function CouponCode() {
                   'focus:outline-indigo-700 focus:outline'
                 )}
                 type="text" 
-                placeholder='Enter coupon code'/>
+                placeholder='Enter coupon code'
+                onChange={(e) => handleChangeCouponCode(e)}/>
             </div>
             <button 
               className={clsx(

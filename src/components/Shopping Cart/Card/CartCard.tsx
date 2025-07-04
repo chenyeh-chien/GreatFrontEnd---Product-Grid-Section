@@ -1,10 +1,12 @@
 import { clsx } from 'clsx';
 import type { EcommerceCartItem } from '../../utils/types';
+import { useCartStore } from '../../../stores/useCartStore';
 import { capitalize } from '../../utils/utilFunctions';
 import QuantityButton from '../../utils/Button/Quantity/QuantityButton';
 
 interface Props {
   item: EcommerceCartItem;
+  itemIndex: number;
 }
 
 const clothSizeMap: { [size: string]: string } = {
@@ -15,7 +17,8 @@ const clothSizeMap: { [size: string]: string } = {
   xl: "Extra Large"
 }
 
-export default function CartCard({ item }: Props) {
+export default function CartCard({ item, itemIndex }: Props) {
+  const removeCartItem = useCartStore((state) => state.removeCartItem);
 
   function handleChangeQuantity(selected: number) {
 
@@ -63,7 +66,8 @@ export default function CartCard({ item }: Props) {
                 'focus:bg-white',
                 'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12)] focus:outline-none',
                 'disabled:text-neutral-400'
-              )}>
+              )}
+              onClick={() => removeCartItem(itemIndex)}>
               Remove
             </button>
           </div>
