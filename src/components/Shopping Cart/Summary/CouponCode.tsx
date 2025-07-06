@@ -1,17 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RiCouponLine } from "react-icons/ri";
+import { RxCross2 } from "react-icons/rx";
 import { clsx } from 'clsx';
 import type { CouponResponse } from '../../utils/types';
 import { applyCouponCode } from '../../utils/utilFunctions';
  
 interface Props {
-  code: string | null;
+  code?: string;
   onChangeCoupon: (coupon: CouponResponse | null) => void;
 }
 
 export default function CouponCode({ code, onChangeCoupon }: Props) {
-  const [showCouponCode, setShowCouponCode] = useState(false);
-  const [couponCode, setCouponCode] = useState<string | null>("");
+  const [showCouponCode, setShowCouponCode] = useState(code !== undefined);
+  const [couponCode, setCouponCode] = useState<string | null>(code ?? null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+
+  // TODO: check if the existed coupon code is still usable
+  useEffect(() => {
+    if (code !== undefined) {
+      applyCouponCode(code)
+        .then((data) => {
+          onChangeCoupon(data);
+        })
+        .catch(error => {
+          onChangeCoupon(null);
+        })
+    } 
+    
+  }, [code])
 
   function handleChangeCouponCode(e: React.ChangeEvent) {
     e.preventDefault();
@@ -22,14 +38,28 @@ export default function CouponCode({ code, onChangeCoupon }: Props) {
 
   async function handleApplyCoupon(e: React.MouseEvent) {
     e.preventDefault();
-
+  
     if (couponCode === null) {
+      setCouponError("Please type coupon to add.");
+      return;
+    }
+
+    if (couponCode === "") {
+      setCouponError("Please enter a valid code.");
       return;
     }
 
     // applyCouponCode
-    const result = await applyCouponCode(couponCode);
-    onChangeCoupon(result);
+    try {
+      const result = await applyCouponCode(couponCode);
+      console.log(result);
+      onChangeCoupon(result);
+    } catch (error) {
+      setCouponError("Sorry, but this coupon doesn't exist.");
+      return;
+    }
+
+    setCouponError(null);
   }
 
   return (
@@ -38,39 +68,67 @@ export default function CouponCode({ code, onChangeCoupon }: Props) {
         <div className={clsx(
           'flex flex-col justify-end gap-2 self-stretch py-1',
         )}>
-          <form className='flex gap-2 justify-end items-end self-stretch'>
-            <div className='flex flex-col gap-1.5 grow'>
-              <label 
-                className='font-medium text-sm text-neutral-700'
-                htmlFor='coupon-input'>
-                Coupon code
-              </label>
-              <input 
-                id="coupon-input"
-                className={clsx(
-                  'px-3.5 py-2.5 rounded bg-neutral-50 grow',
-                  'border border-solid border-neutral-200',
-                  'font-normal text-sm text-neutral-900',
-                  'placeholder:text-neutral-500',
-                  'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12),' + 
-                  '0_1px_2px_0_rgba(16,24,40,0.05),' + 
-                  '0_0_0_1px_rgba(68,76,231,1)]',
-                  'focus:outline-indigo-700 focus:outline'
-                )}
-                type="text" 
-                placeholder='Enter coupon code'
-                onChange={(e) => handleChangeCouponCode(e)}/>
-            </div>
-            <button 
+          <div>
+            <form 
               className={clsx(
-                "w-20 px-3.5 py-2.5 font-medium text-sm text-neutral-900",
-                "rounded border-[0.5px] border-solid border-neutral-200",
-                'hover:cursor-pointer'
-              )}
-              onClick={handleApplyCoupon}>
-              Apply
-            </button>
-          </form>
+                'flex gap-2 justify-end self-stretch',
+                couponError ? "items-center" : "items-end"
+              )}>
+              <div className='flex flex-col gap-1.5 grow'>
+                <div className='flex flex-col gap-1.5 grow'>
+                  <label 
+                    className='font-medium text-sm text-neutral-700'
+                    htmlFor='coupon-input'>
+                    Coupon code
+                  </label>
+                  <input 
+                    id="coupon-input"
+                    className={clsx(
+                      'px-3.5 py-2.5 rounded bg-neutral-50 grow',
+                      'border border-solid border-neutral-200',
+                      'font-normal text-sm text-neutral-900',
+                      'placeholder:text-neutral-500',
+                      'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12),' + 
+                      '0_1px_2px_0_rgba(16,24,40,0.05),' + 
+                      '0_0_0_1px_rgba(68,76,231,1)]',
+                      couponError ? "focus:outline-red-600" : "focus:outline-indigo-700",
+                      'focus:outline'
+                    )}
+                    type="text" 
+                    placeholder='Enter coupon code'
+                    onChange={(e) => handleChangeCouponCode(e)}/>
+                </div>
+                {couponError !== null && (
+                  <span className="font-normal text-sm text-red-600">
+                    {couponError}
+                  </span>
+                )}
+              </div>
+              <button 
+                className={clsx(
+                  "w-20 px-3.5 py-2.5 font-medium text-sm text-neutral-900",
+                  "rounded border-[0.5px] border-solid border-neutral-200",
+                  'hover:cursor-pointer'
+                )}
+                onClick={handleApplyCoupon}>
+                Apply
+              </button>
+            </form>
+          </div>
+          {code !== undefined && (
+            <span className={clsx(
+              'flex gap-1 bg-gray-200 px-2 py-1 rounded w-max',
+              'border-[0.5px] border-solid border-neutral-200',
+              'font-medium text-sm text-neutral-900'
+            )}>
+              <span>{code}</span>
+              <span 
+                className='flex justify-center items-center hover:cursor-pointer'
+                onClick={() => onChangeCoupon(null)}>
+                <RxCross2 />
+              </span>
+            </span>
+          )}
         </div>
       ) : (
         <div className={clsx(

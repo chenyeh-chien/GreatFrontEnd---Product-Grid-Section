@@ -1,11 +1,16 @@
+import { useNavigate } from "react-router";
+import { RiShoppingCart2Line } from "react-icons/ri";
+import { FaArrowRight } from "react-icons/fa6";
 import { clsx } from 'clsx';
+import { useCartStore } from '../../stores/useCartStore';
 import CartCard from '../../components/Shopping Cart/Card/CartCard';
 import OrderSummary from '../../components/Shopping Cart/Summary/OrderSummary';
-import { useCartStore } from '../../stores/useCartStore';
+import Fallback from '../../components/utils/Fallback/Fallback';
+
 
 export default function ShoppingCart() {
+  const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.cartItems);
-  console.log(cartItems)
 
   return (
     <main className={clsx(
@@ -16,7 +21,7 @@ export default function ShoppingCart() {
       <h1 className='font-semibold text-3xl text-neutral-900'>
         Shopping Cart
       </h1>
-      {cartItems !== null && (
+      {cartItems !== null ? (
         <section className={clsx(
           'flex flex-col gap-16',
           'xl:flex-row xl:gap-8'
@@ -38,6 +43,16 @@ export default function ShoppingCart() {
           <OrderSummary 
             subtotal={cartItems.summary.subtotal}/>
         </section>
+      ) : (
+        <Fallback 
+          Icon={RiShoppingCart2Line}
+          mainDesc="Your cart is empty"
+          subDesc="Let's go explore some products"
+          button={{ 
+            text: "Explore products",
+            buttonIcon: FaArrowRight,
+          }}
+          onClick={() => navigate("/shop-all")}/>
       )}
     </main>
   )

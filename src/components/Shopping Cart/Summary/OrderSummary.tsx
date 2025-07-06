@@ -1,21 +1,33 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { clsx } from 'clsx';
 import type { CouponResponse } from '../../utils/types';
+import { useCartStore } from '../../../stores/useCartStore';
 import SummaryInfo from './SummaryInfo';
 import CouponCode from './CouponCode';
 import ConfirmButton from '../../utils/Button/Confirm/ConfirmButton';
 
 interface Props {
   subtotal: number;
-  
 }
 
 export default function OrderSummary({ subtotal }: Props) {
-  const [coupon, setCoupon] = useState<CouponResponse | null>({
-    coupon_code: "GR8FRNTND24",
-    discount_amount: 5,
-    discount_percentage: null
-  });
+  // TODO: get summary from cartStore
+  const [coupon, setCoupon] = useState<CouponResponse | null>(null);
+  const cartItems = useCartStore((state) => state.cartItems);
+  const updateCouponCode = useCartStore((state) => state.updateCouponCode);
+  const summary = useMemo(() => {
+    if (cartItems === null) {
+      return {
+        subtotal: 0,
+        discount: 0,
+        discount_code: null,
+        shipping: 0,
+        total: 0
+      }
+    }
+
+    return cartItems.summary;
+  }, [cartItems]);
 
   function handleCheckout() {
 
@@ -24,8 +36,8 @@ export default function OrderSummary({ subtotal }: Props) {
   return (
     <section className={clsx(
       'flex flex-col gap-8',
-      'bg-white p-4 rounded-lg border border-solid border-neutral-200',
-      'xl:w-96 xl:h-max'
+      'bg-white p-8 rounded-lg border border-solid border-neutral-200',
+      'xl:w-96'
     )}>
       <h2 className='font-semibold text-2xl text-neutral-900'>
         Order Summary
@@ -34,21 +46,21 @@ export default function OrderSummary({ subtotal }: Props) {
         <SummaryInfo 
           category='text'
           label='Subtotal'
-          text={`$${subtotal}`}/>
+          text={`$${summary.subtotal.toFixed(2)}`}/>
         <SummaryInfo 
           category='text'
           label='Shipping'
-          text='Free'/>
-        {coupon !== null && (
+          text={summary.shipping === 0 ? 'Free' : `$${summary.shipping.toFixed(2)}`}/>
+        {summary.discount_code !== null && (
           <SummaryInfo 
             category='tag'
-            label={coupon.coupon_code}
-            text='Free'/>
+            label={summary.discount_code}
+            text={`-$${summary.discount.toFixed(2)}`}/>
         )}
         <div>
           <CouponCode 
-            code={coupon.coupon_code}
-            onChangeCoupon={setCoupon}/>
+            code={summary.discount_code ?? undefined}
+            onChangeCoupon={updateCouponCode}/>
         </div>
       </div>
       <hr className="border-t border-dashed border-gray-300"/>
@@ -57,7 +69,7 @@ export default function OrderSummary({ subtotal }: Props) {
           Total
         </span>
         <span className='font-semibold text-4xl text-right text-neutral-900 grow'>
-          ${subtotal}
+          ${summary.total.toFixed(2)}
         </span>
       </div>
       <ConfirmButton 

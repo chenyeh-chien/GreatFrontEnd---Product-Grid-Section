@@ -115,7 +115,13 @@ export function applyCouponCode(code: string):
           coupon_code: code
         })
       })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("error");
+          }
+
+          return response.json();
+        })
         .then(data => resolve(data))
         .catch(error => reject(error));
     })

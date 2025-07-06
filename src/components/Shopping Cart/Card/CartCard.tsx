@@ -18,10 +18,15 @@ const clothSizeMap: { [size: string]: string } = {
 }
 
 export default function CartCard({ item, itemIndex }: Props) {
+  const updateCartItem = useCartStore((state) => state.updateCartItem);
   const removeCartItem = useCartStore((state) => state.removeCartItem);
 
-  function handleChangeQuantity(selected: number) {
+  function handleChangeQuantity(quantity: number) {
+    const cart = structuredClone(item);
+    cart.quantity = quantity;
+    console.log(cart)
 
+    updateCartItem(itemIndex, cart);
   }
 
   return (
@@ -32,10 +37,10 @@ export default function CartCard({ item, itemIndex }: Props) {
       <img 
         className={clsx(
           'h-[200px] object-cover rounded-lg',
-          'md:min-w-[280px]'
+          'md:w-[280px] md:min-w-[280px]'
         )}
         src={item.unit.image_url}/>
-      <div className="flex flex-col gap-4 self-stretch">
+      <div className="flex flex-col gap-4 grow self-stretch">
         <h2 className='font-medium text-2xl text-neutral-900'>
           {item.product.name}
         </h2>

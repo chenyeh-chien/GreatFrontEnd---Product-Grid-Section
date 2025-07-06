@@ -12,11 +12,12 @@ import type {
   QueryObject,
 } from "../../components/utils/types";
 import { RiFilterLine } from "react-icons/ri";
+import { RiTShirt2Line } from "react-icons/ri";
 import FilterMain from "../../components/utils/Filter/Filter Main/FilterMain.tsx";
 import BaseButton from "../../components/utils/Button/BaseButton";
 import Dropdown from "../../components/utils/Dropdown/Dropdown.tsx";
 import ProductCard from "../../components/utils/Card/Product Card/ProductCard";
-import FilterFallback from "../../components/utils/Fallback/FilterFallback.tsx";
+import Fallback from "../../components/utils/Fallback/Fallback.tsx";
 
 const initialSortOptions = [{
   id: "1",
@@ -175,8 +176,12 @@ export default function ShopAll() {
                 })}
               </main>)
           : (
-            <FilterFallback 
-              onReset={resetFilterOptions}/>
+            <Fallback 
+              Icon={RiTShirt2Line}
+              mainDesc="Nothing found just yet"
+              subDesc="Adjust your filters a bit, and let's see what we can find!"
+              button={{ text: "Reset filters" }}
+              onClick={resetFilterOptions}/>
           )
         )}
       </div>

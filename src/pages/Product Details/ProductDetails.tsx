@@ -104,10 +104,6 @@ export default function ProductDetails() {
       return;
     }
 
-    console.log(cartItems);
-
-    const listPrice = productDetails.inventory[inventoryIndex].list_price;
-    const salePrice = productDetails.inventory[inventoryIndex].sale_price;
     const quantity = options.quantity.selected;
 
     const imageURL = 
@@ -115,7 +111,6 @@ export default function ProductDetails() {
         item => item.color === productDetails.inventory[inventoryIndex].color
       );
 
-    // TODO: arrange selected option to cart
     const cartItem: EcommerceCartItem = {
       product: {
         product_id: productDetails.product_id,
@@ -124,20 +119,19 @@ export default function ProductDetails() {
       },
       unit: {
         sku: productDetails.inventory[inventoryIndex].sku,
-        list_price: listPrice,
-        sale_price: salePrice,
+        list_price: productDetails.inventory[inventoryIndex].list_price,
+        sale_price: productDetails.inventory[inventoryIndex].sale_price,
         size: productDetails.inventory[inventoryIndex].size,
         color: productDetails.inventory[inventoryIndex].color,
         stock: productDetails.inventory[inventoryIndex].stock,
         image_url: imageURL.length > 0 ? imageURL[0].image_url : ""
       },
-      total_list_price: listPrice * quantity,
-      total_sale_price: salePrice * quantity,
+      total_list_price: 0,
+      total_sale_price: 0,
       quantity,
       created_at: getDateStr(),
     }
 
-    // Add to state management. ex: zustand
     addCartItem(cartItem);
   }
 
