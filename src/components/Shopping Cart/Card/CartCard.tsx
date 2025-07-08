@@ -3,6 +3,7 @@ import type { EcommerceCartItem } from '../../utils/types';
 import { useCartStore } from '../../../stores/useCartStore';
 import { capitalize } from '../../utils/utilFunctions';
 import QuantityButton from '../../utils/Button/Quantity/QuantityButton';
+import Modal from '../../utils/Modal/Modal';
 
 interface Props {
   item: EcommerceCartItem;
@@ -75,6 +76,10 @@ export default function CartCard({ item, itemIndex }: Props) {
               onClick={() => removeCartItem(itemIndex)}>
               Remove
             </button>
+            <Modal 
+              title='Confirm Item Removal'
+              text='Are you sure you want to remove this item from your shopping cart?'
+              />
           </div>
           <div className='flex justify-end items-center gap-2'>
             <span className='font-medium text-lg text-right text-neutral-900'>

@@ -10,7 +10,7 @@ export default function BaseButton({ text, children, onClick }: Props) {
   return (
     <button 
       className={clsx(
-        "flex justify-center items-center gap-1",
+        "flex justify-center items-center gap-1 grow",
         "bg-white px-3.5 py-2.5 rounded-sm",
         "border-[0.5px] border-solid border-neutral-200",
         "hover:cursor-pointer",

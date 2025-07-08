@@ -28,6 +28,7 @@ export function Layout({
       </head>
       <body>
         {children}
+        <div id="modal-root"></div>
         <ScrollRestoration />
         <Scripts />
       </body>
