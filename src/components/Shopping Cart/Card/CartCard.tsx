@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { NavLink } from "react-router";
 import { clsx } from 'clsx';
 import type { EcommerceCartItem } from '../../utils/types';
 import { useCartStore } from '../../../stores/useCartStore';
@@ -19,6 +21,7 @@ const clothSizeMap: { [size: string]: string } = {
 }
 
 export default function CartCard({ item, itemIndex }: Props) {
+  const [showModal, setShowModal] = useState(false);
   const updateCartItem = useCartStore((state) => state.updateCartItem);
   const removeCartItem = useCartStore((state) => state.removeCartItem);
 
@@ -28,6 +31,11 @@ export default function CartCard({ item, itemIndex }: Props) {
     console.log(cart)
 
     updateCartItem(itemIndex, cart);
+  }
+
+  function handleRemoveCartItem(index: number) {
+    setShowModal(false);
+    removeCartItem(index);
   }
 
   return (
@@ -42,9 +50,17 @@ export default function CartCard({ item, itemIndex }: Props) {
         )}
         src={item.unit.image_url}/>
       <div className="flex flex-col gap-4 grow self-stretch">
-        <h2 className='font-medium text-2xl text-neutral-900'>
-          {item.product.name}
-        </h2>
+        <NavLink
+          className="w-max"
+          to={`/product-details?productID=${item.product.product_id}`}>
+          <h2 
+            className={clsx(
+              'font-medium text-2xl text-neutral-900 w-max',
+              'hover:text-indigo-700'
+            )}>
+            {item.product.name}
+          </h2>
+        </NavLink>
         <div className='font-medium text-base text-neutral-600'>
           <span>{capitalize(item.unit.color!)}</span>
           {item.unit.size !== null && (
@@ -64,6 +80,16 @@ export default function CartCard({ item, itemIndex }: Props) {
             incrementDisabled={item.quantity >= item.unit.stock}
             decrementDisabled={item.quantity <= 0}
             onChange={handleChangeQuantity}/>
+          <Modal
+            width={592}
+            title='Change of stock'
+            text='While you were browsing, certain stocks have become unavailable:'
+            confirmText="Ok"
+            showCancelButton={false}
+            onClose={() => setShowModal(false)}
+            onConfirm={() => handleRemoveCartItem(itemIndex)}>
+            TODO
+          </Modal>
           <div className='flex items-center grow'>
             <button 
               className={clsx(
@@ -73,13 +99,17 @@ export default function CartCard({ item, itemIndex }: Props) {
                 'focus:shadow-[0_0_0_4px_rgba(68,76,231,0.12)] focus:outline-none',
                 'disabled:text-neutral-400'
               )}
-              onClick={() => removeCartItem(itemIndex)}>
+              onClick={() => setShowModal(true)}>
               Remove
             </button>
-            <Modal 
-              title='Confirm Item Removal'
-              text='Are you sure you want to remove this item from your shopping cart?'
-              />
+            {showModal && (
+              <Modal
+                width={343}
+                title='Confirm Item Removal'
+                text='Are you sure you want to remove this item from your shopping cart?'
+                onClose={() => setShowModal(false)}
+                onConfirm={() => handleRemoveCartItem(itemIndex)}/>
+            )}
           </div>
           <div className='flex justify-end items-center gap-2'>
             <span className='font-medium text-lg text-right text-neutral-900'>
