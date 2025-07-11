@@ -26,9 +26,13 @@ export default function CartCard({ item, itemIndex }: Props) {
   const removeCartItem = useCartStore((state) => state.removeCartItem);
 
   function handleChangeQuantity(quantity: number) {
+    // TODO: check if the stock is sufficient for purchasing
+    // 1. fetch current inventory
+    // 2. check quantity changes
+    // 3. display change notifications
+    // 4. update cartItem
     const cart = structuredClone(item);
     cart.quantity = quantity;
-    console.log(cart)
 
     updateCartItem(itemIndex, cart);
   }
